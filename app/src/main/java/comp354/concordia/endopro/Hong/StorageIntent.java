@@ -1,8 +1,8 @@
 package comp354.concordia.endopro.Hong;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
+import android.content.Context;
 import android.util.Log;
 
 import java.io.FileOutputStream;
@@ -17,11 +17,11 @@ import comp354.concordia.endopro.Common.User;
  * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
-public class DB_IntentService extends IntentService {
-    private static final String TAG="endopro";
+public class StorageIntent extends IntentService {
+    private static final String TAG="endopro_logi_db";
 
-    public DB_IntentService() {
-        super("DB_IntentService");
+    public StorageIntent() {
+        super("StorageIntent");
     }
 
     @Override

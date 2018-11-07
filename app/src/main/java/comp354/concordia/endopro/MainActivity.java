@@ -17,12 +17,13 @@ import java.io.ObjectInputStream;
 import comp354.concordia.endopro.Common.User;
 import comp354.concordia.endopro.Hong.App_Data;
 import comp354.concordia.endopro.Hong.AuthenticationException;
-import comp354.concordia.endopro.Hong.DB_IntentService;
 import comp354.concordia.endopro.Hong.SignUp;
+import comp354.concordia.endopro.Hong.StorageIntent;
+import comp354.concordia.endopro.Hong.test;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG="endopro.Main";
+    private static final String TAG="endopro_logi_main";
     private EditText userNameTxt;
     private EditText passwordTxt;
     private CheckBox autoAuth;
@@ -31,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Disable Screen Rotation
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        setContentView(R.layout.activity_main);
 
         FileInputStream file=null;
         try {
@@ -50,12 +56,10 @@ public class MainActivity extends AppCompatActivity {
             User.setApp_data(new App_Data());
         }
 
-        Intent save = new Intent(this,DB_IntentService.class);
+        Intent save = new Intent(getApplicationContext(),StorageIntent.class);
         startService(save);
 
-        //Disable Screen Rotation
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setContentView(R.layout.activity_main);
+        Log.i(TAG, "onCreate: Got here");
 
         //Get all UI elements
         errorText = findViewById(R.id.errorText_main);
@@ -92,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void TransitionToDashboard(){
-        Intent dashboard = new Intent();
+        Intent dashboard = new Intent(getApplicationContext(),test.class);
         startActivity(dashboard);
     }
 
@@ -131,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 */
                 if(autoAuth && User.getApp_data().getCached()==null){
                     User.rememberUser();
-                    Intent save = new Intent(getApplicationContext(),DB_IntentService.class);
+                    Intent save = new Intent(getApplicationContext(),StorageIntent.class);
                     startService(save);
                 }
                 TransitionToDashboard();

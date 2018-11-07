@@ -14,7 +14,7 @@ import comp354.concordia.endopro.MainActivity;
 import comp354.concordia.endopro.R;
 
 public class SignUp extends AppCompatActivity {
-
+    private static final String TAG="endopro.logi_signup";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,8 +69,7 @@ public class SignUp extends AppCompatActivity {
 
                 User.setInstance(app_username,app_password,endo_username,endo_password);
 
-                Intent DB = new Intent(getApplicationContext(),DB_IntentService.class);
-                DB.setAction("SAVE");
+                Intent DB = new Intent(getApplicationContext(),StorageIntent.class);
                 startService(DB);
                 finish();
             }else{
