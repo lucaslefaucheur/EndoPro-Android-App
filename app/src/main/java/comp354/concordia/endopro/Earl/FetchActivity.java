@@ -27,7 +27,7 @@ public class FetchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fetch);
 
         //testing
-      User.setInstance("app_u","app_p","paynedicka1@gmail.com","endo354mondo");
+      //User.setInstance("app_u","app_p","paynedicka1@gmail.com","endo354mondo");
         User test_user = User.getInstance();
         statusTV =  findViewById(R.id.currentStatus);
         final CyclingFetcher test  = new CyclingFetcher();
