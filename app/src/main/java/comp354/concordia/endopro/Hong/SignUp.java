@@ -15,6 +15,8 @@ import comp354.concordia.endopro.R;
 
 public class SignUp extends AppCompatActivity {
     private static final String TAG="endopro.logi_signup";
+    TextView errorText = findViewById(R.id.error_signup);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +55,7 @@ public class SignUp extends AppCompatActivity {
         EditText endo_usernameTxt = findViewById(R.id.username_endo_signup);
         EditText endo_passwordTxt = findViewById(R.id.password_endo_signup);
 
-        final TextView errorText = findViewById(R.id.error_signup);
+
 
         String app_username=app_usernameTxt.getText().toString();
         String app_password=app_passwordTxt.getText().toString();
