@@ -10,17 +10,23 @@
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="223dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="128dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.318" />
 
     <Button
         android:id="@+id/buttonHistorySpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="56dp"
         android:text="History"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +35,7 @@
         android:id="@+id/buttonMonthlySpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="56dp"
         android:layout_marginEnd="8dp"
         android:text="Monthly"
         android:textSize="14sp"
@@ -41,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="56dp"
         android:layout_marginEnd="8dp"
         android:text="Yearly"
         app:layout_constraintEnd_toStartOf="@+id/buttonMonthlySpeed"
@@ -52,22 +58,19 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="68dp"
         android:text="Speed:"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.265" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="20dp"
         android:text="Distance: "
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/graph"
@@ -83,7 +86,8 @@
         android:text="History"
         app:layout_constraintBottom_toTopOf="@+id/graph"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonHistorySpeed" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonHistorySpeed"
+        app:layout_constraintVertical_bias="0.898" />
 
     <Button
         android:id="@+id/buttonYearlyDistance"
@@ -97,7 +101,8 @@
         app:layout_constraintBottom_toTopOf="@+id/graph"
         app:layout_constraintEnd_toStartOf="@+id/buttonMonthlyDistance"
         app:layout_constraintStart_toEndOf="@+id/buttonHistoryDistance"
-        app:layout_constraintTop_toBottomOf="@+id/buttonYearlySpeed" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonYearlySpeed"
+        app:layout_constraintVertical_bias="0.898" />
 
     <Button
         android:id="@+id/buttonMonthlyDistance"
@@ -109,6 +114,52 @@
         android:text="Monthly"
         app:layout_constraintBottom_toTopOf="@+id/graph"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonMonthlySpeed" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonMonthlySpeed"
+        app:layout_constraintVertical_bias="0.909" />
+
+    <Button
+        android:id="@+id/settings_dashboard"
+        android:layout_width="157dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
+        android:background="@color/design_default_color_primary"
+        android:text="Settings"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/signout_dashboard"
+        app:layout_constraintHorizontal_bias="0.173"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/signout_dashboard"
+        android:layout_width="157dp"
+        android:layout_height="54dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@color/colorAccent"
+        android:text="Sign Out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/filter_dashboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="132dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="12dp"
+        android:text="Filter"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/filter_dashboard"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

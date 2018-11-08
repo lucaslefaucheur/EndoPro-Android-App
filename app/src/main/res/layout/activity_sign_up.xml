@@ -12,9 +12,8 @@
         android:layout_width="318dp"
         android:layout_height="49dp"
         android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
         android:layout_marginTop="16dp"
-        android:text="Change Account Password"
+        android:text="Account Info"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,9 +23,8 @@
         android:layout_width="318dp"
         android:layout_height="49dp"
         android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
         android:layout_marginTop="184dp"
-        android:text="Change Endo Info"
+        android:text="Endomondo Info"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView2" />

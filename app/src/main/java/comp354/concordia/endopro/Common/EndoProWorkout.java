@@ -1,6 +1,8 @@
 package comp354.concordia.endopro.Common;
 
-public class EndoProWorkout {
+import java.io.Serializable;
+
+public class EndoProWorkout implements Serializable {
 
     private double speed_avg;
     private double speed_max;

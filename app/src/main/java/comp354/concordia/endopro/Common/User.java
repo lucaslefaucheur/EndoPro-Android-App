@@ -84,10 +84,14 @@ public class User implements Serializable {
         return false;
     }
 
-    public boolean updateEndoInfo(String app_password, String endo_username, String endo_password){
-        if(Authenticate(app_username,app_password)){
-            if(endo_username!="") m_user.endo_username=endo_username;
-            if(endo_password!="") m_user.endo_password=endo_password;
+    public void updateEndoInfo(String endo_username, String endo_password){
+        if(endo_username!="") m_user.endo_username=endo_username;
+        if(endo_password!="") m_user.endo_password=endo_password;
+    }
+
+    public boolean updatePassword(String oldpass, String newPass){
+        if (Authenticate(app_username,oldpass)){
+            app_password=newPass;
             return true;
         }
         return false;

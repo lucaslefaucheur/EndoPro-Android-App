@@ -47,7 +47,8 @@ public class Settings extends AppCompatActivity {
                 }
                 User current = User.getInstance();
 
-                if(current.updateEndoInfo(oldPassTxt.toString(),usernameEndo.toString(),passwordEndo.toString())){
+                current.updateEndoInfo(usernameEndo.toString(),passwordEndo.toString());
+                if(current.updatePassword(oldPassTxt.toString(),newPassTxt.toString())){
                     Intent saveIntent = new Intent(getApplicationContext(),StorageIntent.class);
                     startService(saveIntent);
                     finish();

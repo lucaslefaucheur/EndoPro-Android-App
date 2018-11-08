@@ -1,9 +1,11 @@
 package comp354.concordia.endopro.DanielT;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -19,7 +21,7 @@ import comp354.concordia.endopro.R;
 public class Filtering extends AppCompatActivity {
 
     Button btn;
-    Button btn2;
+    ImageButton closeBtn;
 
     TextView textView1;
     SeekBar seekbar1;
@@ -37,7 +39,6 @@ public class Filtering extends AppCompatActivity {
 
     Random rand = new Random();
 
-
     TextView starttime;
     TextView distance;
     TextView speed;
@@ -46,6 +47,10 @@ public class Filtering extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Disable Screen Rotation
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         setContentView(R.layout.activity_filter);
 
         /*
@@ -58,16 +63,14 @@ public class Filtering extends AppCompatActivity {
 
 
         btn = (Button)findViewById(R.id.button);
-        btn2 = (Button)findViewById(R.id.nextButton);
+        closeBtn = findViewById(R.id.close_filter);
         textView1 = (TextView)findViewById(R.id.textView2);
         seekbar1 = (SeekBar)findViewById(R.id.seekBar);
 
         seekbar1.setMax(max);
         seekbar1.setProgress(max);
 
-
         textView1.setText(max + " km");
-
 
         textView2 = (TextView)findViewById(R.id.textView4);
         seekbar2 = (SeekBar)findViewById(R.id.seekBar2);
@@ -87,31 +90,20 @@ public class Filtering extends AppCompatActivity {
             starttime.append(myworkouts.get(i).getStartTime() + "\n");
             distance.append(String.format("%.2f", myworkouts.get(i).getDistance()) + "\n\n");
             speed.append(String.format("%.2f", myworkouts.get(i).getSpeedAverage()) + "\n\n");
-
-
         }
 
         seekbar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, final int progress, boolean fromUser) {
-
                 textView1.setText(progress + " km");
-
-
-
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(final SeekBar seekBar) {
-
-
-
-
             }
 
         });
@@ -133,10 +125,10 @@ public class Filtering extends AppCompatActivity {
 
             }
         });
-        btn2.setOnClickListener(new View.OnClickListener() {
+        closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Filtering.this, Dashboard.class));
+                finish();
             }
         });
         btn.setOnClickListener(new View.OnClickListener() {
@@ -161,14 +153,13 @@ public class Filtering extends AppCompatActivity {
                                 }
                             }
                             user.setFilteredWorkout(filter);
-
+                            finish();
 
                         } catch (Exception e) {starttime.setText("Error"); }
 
 
                     }
                 }).run();
-
 
             }
         });

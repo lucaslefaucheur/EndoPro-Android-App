@@ -22,7 +22,7 @@ public class EndoProGraph {
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setYAxisBoundsManual(true);
 
-        workouts = user.getWorkouts(); // user.getWorkouts_Filtered();
+        workouts = user.getWorkouts_filtered();
 
         organizeWorkouts();
     }

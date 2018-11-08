@@ -26,7 +26,7 @@ public class StorageIntent extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.i(TAG, "onHandleIntent: Intent received");
+        Log.i(TAG, "onHandleIntent: Saving data to Storage");
         FileOutputStream outputStream=null;
         try {
             outputStream = openFileOutput("endoData.txt", Context.MODE_PRIVATE);

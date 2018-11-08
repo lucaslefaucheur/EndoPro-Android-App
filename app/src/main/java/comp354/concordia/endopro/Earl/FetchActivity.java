@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +17,8 @@ import comp354.concordia.endopro.Lucas.Dashboard;
 import comp354.concordia.endopro.R;
 
 public class FetchActivity extends AppCompatActivity {
+    private static final String TAG="endopro_logi_data_fetcher";
+
     public static TextView statusTV ;
 
     public static String stat = "";
@@ -25,10 +28,11 @@ public class FetchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fetch);
-
+        Log.i(TAG, "onCreate: Transitioned to data_fetcher");
+        
         //testing
-      //User.setInstance("app_u","app_p","paynedicka1@gmail.com","endo354mondo");
-        User test_user = User.getInstance();
+        //User.setInstance("app_u","app_p","paynedicka1@gmail.com","endo354mondo");
+        //User test_user = User.getInstance();
         statusTV =  findViewById(R.id.currentStatus);
         final CyclingFetcher test  = new CyclingFetcher();
 
@@ -37,24 +41,23 @@ public class FetchActivity extends AppCompatActivity {
             if(!checking)
                 checkConnection();
         }
+
+        Log.i(TAG, "onCreate: passed here");
         if(connected)
-         test.generateWorkoutList();
+            test.generateWorkoutList();
         if(CyclingFetcher.done) {
-            startActivity(new Intent(FetchActivity.this, Dashboard.class));
-            FetchActivity.this.finish();
+            startActivity(new Intent(getApplicationContext(), Dashboard.class));
+            finish();
         }
-            final Button button = findViewById(R.id.skip);
 
-        button.setOnClickListener(new View.OnClickListener() {
-                                      public void onClick(View v) {
-
-                                          // Code here executes on main thread after user presses button
-                                          startActivity(new Intent(FetchActivity.this, Dashboard.class));
-                                          FetchActivity.this.finish();
-
-                                      }
-                                  }
-
+        final Button skipBtn = findViewById(R.id.skip);
+        skipBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Code here executes on main thread after user presses button
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                finish();
+            }
+          }
         );
     }
     private  void checkConnection(){

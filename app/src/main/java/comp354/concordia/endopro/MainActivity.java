@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FileInputStream file=null;
-        //TransitionToDashboard();
         try {
             file = openFileInput("endoData.txt");
             ObjectInputStream object = new ObjectInputStream(file);
@@ -62,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
         Intent save = new Intent(getApplicationContext(),StorageIntent.class);
         startService(save);
 
-        Log.i(TAG, "onCreate: Got here");
-
         //Get all UI elements
         errorText = findViewById(R.id.errorText_main);
         Button signinBtn = findViewById(R.id.signinBtn_main);
@@ -74,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         signinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 handleSignin(autoAuth.isChecked());
             }
         });
@@ -98,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void TransitionToDashboard(){
-        Intent dashboard = new Intent(getApplicationContext(),Filtering.class);
+        Intent dashboard = new Intent(getApplicationContext(),FetchActivity.class);
         startActivity(dashboard);
     }
 
@@ -154,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
     private void handleSignup(){
         EditText userNameTxt = findViewById(R.id.usernameText_main);
         String userName=userNameTxt.getText().toString();
-
         /*
             User Creation Phase
             If user already entered some info before clicking "Sign Up", that info
