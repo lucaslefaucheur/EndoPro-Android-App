@@ -17,5 +17,13 @@ public class EndoProWorkout {
         this.duration = duration;
         this.startTime = startTime;
     }
+    public double getSpeedAverage() { return speed_avg; }
 
+    public double getSpeedMax() { return speed_max; }
+
+    public double getDistance() { return distance; }
+
+    public double getDuration() { return duration; }
+
+    public String getStartTime() { return startTime; }
 }
