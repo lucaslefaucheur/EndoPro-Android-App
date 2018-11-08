@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FileInputStream file=null;
+        TransitionToDashboard();
         try {
             file = openFileInput("endoData.txt");
             ObjectInputStream object = new ObjectInputStream(file);
