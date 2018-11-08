@@ -20,6 +20,7 @@
         <activity android:name=".Hong.Settings" />
         <activity android:name=".Hong.SignUp" />
         <activity android:name=".Hong.test" />
+        <activity android:name=".DanielT.Filtering"></activity>
         <activity android:name="comp354.concordia.endopro.Lucas.Dashboard"></activity>
         <activity android:name="comp354.concordia.endopro.Earl.FetchActivity"/>
         <service

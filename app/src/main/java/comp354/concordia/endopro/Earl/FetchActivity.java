@@ -27,7 +27,7 @@ public class FetchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fetch);
 
         //testing
-      // User.setInstance("app_u","app_p","paynedick1@gmail.com","endo354mondo");
+      //User.setInstance("app_u","app_p","paynedicka1@gmail.com","endo354mondo");
         User test_user = User.getInstance();
         statusTV =  findViewById(R.id.currentStatus);
         final CyclingFetcher test  = new CyclingFetcher();
@@ -39,20 +39,18 @@ public class FetchActivity extends AppCompatActivity {
         }
         if(connected)
          test.generateWorkoutList();
-        if(CyclingFetcher.done)
+        if(CyclingFetcher.done) {
             startActivity(new Intent(FetchActivity.this, Dashboard.class));
-        final Button button = findViewById(R.id.refresh);
+            FetchActivity.this.finish();
+        }
+            final Button button = findViewById(R.id.skip);
 
         button.setOnClickListener(new View.OnClickListener() {
                                       public void onClick(View v) {
-                                          // Code here executes on main thread after user presses button
-                                          checkConnection();
-                                          while(checking);
-                                          if(connected)
-                                              test.generateWorkoutList();
 
-                                            if(CyclingFetcher.done)
-                                                startActivity(new Intent(FetchActivity.this, Dashboard.class));
+                                          // Code here executes on main thread after user presses button
+                                          startActivity(new Intent(FetchActivity.this, Dashboard.class));
+                                          FetchActivity.this.finish();
 
                                       }
                                   }
