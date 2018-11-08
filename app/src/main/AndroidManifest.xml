@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="comp354.concordia.endopro">
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,7 +20,8 @@
         <activity android:name=".Hong.Settings" />
         <activity android:name=".Hong.SignUp" />
         <activity android:name=".Hong.test" />
-
+        <activity android:name="comp354.concordia.endopro.Lucas.Dashboard"></activity>
+        <activity android:name="comp354.concordia.endopro.Earl.FetchActivity"/>
         <service
             android:name=".Hong.StorageIntent"
             android:exported="false"></service>

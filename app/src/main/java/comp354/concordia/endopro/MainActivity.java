@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
 import comp354.concordia.endopro.Common.User;
+import comp354.concordia.endopro.Earl.FetchActivity;
 import comp354.concordia.endopro.Hong.App_Data;
 import comp354.concordia.endopro.Hong.AuthenticationException;
 import comp354.concordia.endopro.Hong.SignUp;
@@ -75,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 handleSignin(autoAuth.isChecked());
             }
         });
-
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void TransitionToDashboard(){
-        Intent dashboard = new Intent(getApplicationContext(),test.class);
+        Intent dashboard = new Intent(getApplicationContext(),FetchActivity.class);
         startActivity(dashboard);
     }
 
