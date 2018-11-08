@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
 import comp354.concordia.endopro.Common.User;
+import comp354.concordia.endopro.DanielT.Filtering;
 import comp354.concordia.endopro.Earl.FetchActivity;
 import comp354.concordia.endopro.Hong.App_Data;
 import comp354.concordia.endopro.Hong.AuthenticationException;
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void TransitionToDashboard(){
-        Intent dashboard = new Intent(getApplicationContext(),FetchActivity.class);
+        Intent dashboard = new Intent(getApplicationContext(),Filtering.class);
         startActivity(dashboard);
     }
 
