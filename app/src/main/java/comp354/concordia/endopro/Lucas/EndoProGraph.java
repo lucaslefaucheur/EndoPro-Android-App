@@ -187,7 +187,7 @@ public class EndoProGraph {
                 if (isValueX) {
                     return null;
                 } else {
-                    return super.formatLabel(value, isValueX) + " km/h";
+                    return super.formatLabel(value, isValueX) + " km";
                 }
             }
         });
@@ -227,7 +227,7 @@ public class EndoProGraph {
                 if (isValueX) {
                     return super.formatLabel(value, isValueX);
                 } else {
-                    return super.formatLabel(value, isValueX) + " km/h";
+                    return super.formatLabel(value, isValueX) + " km";
                 }
             }
         });
@@ -282,7 +282,7 @@ public class EndoProGraph {
                     else return null;
 
                 } else {
-                    return super.formatLabel(value, isValueX) + " km/h";
+                    return super.formatLabel(value, isValueX) + " km";
                 }
             }
         });
