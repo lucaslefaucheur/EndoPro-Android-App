@@ -19,7 +19,6 @@ import comp354.concordia.endopro.Lucas.Dashboard;
 import comp354.concordia.endopro.R;
 
 public class Filtering extends AppCompatActivity {
-
     Button btn;
     ImageButton closeBtn;
 
@@ -31,18 +30,12 @@ public class Filtering extends AppCompatActivity {
 
     int max = 300;
     int max2 = 500;
-    int a = 0;
-    /*
-    User user = new User();
-    */
-    User user = User.getInstance();
 
-    Random rand = new Random();
+    User user = User.getInstance();
 
     TextView starttime;
     TextView distance;
     TextView speed;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +53,6 @@ public class Filtering extends AppCompatActivity {
             user.addWorkout(arr[i]);
         }
         */
-
 
         btn = (Button)findViewById(R.id.button);
         closeBtn = findViewById(R.id.close_filter);
@@ -112,19 +104,25 @@ public class Filtering extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 textView2.setText(progress + " km/h");
-
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
+
+        Button filterBtn = findViewById(R.id.clear_filter);
+        filterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                user.setFilteredWorkout(null);
+            }
+        });
+
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,35 +133,31 @@ public class Filtering extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            starttime.setText("");
-                            speed.setText("");
-                            distance.setText("");
-                            ArrayList<EndoProWorkout> filter = new ArrayList<EndoProWorkout>();
-                            user.setFilteredWorkout(myworkouts);
-                            for(int i = 0;i < myworkouts.size();i++){
-                                if(seekbar2.getProgress() >= myworkouts.get(i).getSpeedAverage() && seekbar1.getProgress() >= myworkouts.get(i).getDistance() ) {
-                                    starttime.append(myworkouts.get(i).getStartTime() + "\n");
-                                    speed.append(String.format("%.2f", myworkouts.get(i).getSpeedAverage()) + "\n\n");
-                                    distance.append(String.format("%.2f", myworkouts.get(i).getDistance()) + "\n\n");
-                                    filter.add(myworkouts.get(i));
-                                }
-                            }
-                            user.setFilteredWorkout(filter);
-                            finish();
-
-                        } catch (Exception e) {starttime.setText("Error"); }
-
-
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                try {
+                    starttime.setText("");
+                    speed.setText("");
+                    distance.setText("");
+                    ArrayList<EndoProWorkout> filter = new ArrayList<EndoProWorkout>();
+                    user.setFilteredWorkout(myworkouts);
+                    for(int i = 0;i < myworkouts.size();i++){
+                        if(seekbar2.getProgress() >= myworkouts.get(i).getSpeedAverage() && seekbar1.getProgress() >= myworkouts.get(i).getDistance() ) {
+                            starttime.append(myworkouts.get(i).getStartTime() + "\n");
+                            speed.append(String.format("%.2f", myworkouts.get(i).getSpeedAverage()) + "\n\n");
+                            distance.append(String.format("%.2f", myworkouts.get(i).getDistance()) + "\n\n");
+                            filter.add(myworkouts.get(i));
+                        }
                     }
-                }).run();
+                    user.setFilteredWorkout(filter);
+                    finish();
 
+                } catch (Exception e) {starttime.setText("Error"); }
+                }
+            }).run();
             }
         });
-
     }
 
 

@@ -3,6 +3,7 @@ package comp354.concordia.endopro.Hong;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,11 +14,17 @@ import comp354.concordia.endopro.Common.User;
 import comp354.concordia.endopro.R;
 
 public class Settings extends AppCompatActivity {
+    private static final String TAG="endopro_logi_settings";
+    private EditText usernameEndo;
+    private EditText passwordEndo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        usernameEndo = findViewById(R.id.username_endo_settings);
+        passwordEndo = findViewById(R.id.password_endo_settings);
 
         Button save = findViewById(R.id.saveBtn_settings);
         ImageButton close = findViewById(R.id.closeBtn_settings);
@@ -36,26 +43,42 @@ public class Settings extends AppCompatActivity {
                 EditText oldPassTxt = findViewById(R.id.password_old_settings);
                 EditText newPassTxt = findViewById(R.id.password_new_settings);
 
-                EditText usernameEndo = findViewById(R.id.username_endo_settings);
-                EditText passwordEndo = findViewById(R.id.password_endo_settings);
-
                 final TextView errorText = findViewById(R.id.errorMessage_settings);
+                String oldPass = oldPassTxt.getText().toString();
+                String newPass = newPassTxt.getText().toString();
+                String endoUsername = usernameEndo.getText().toString();
+                String endoPassword = passwordEndo.getText().toString();
 
-                if(newPassTxt.getText().length()<6){
-                    errorText.setText("Password must be at least 6 characters");
-                    return;
-                }
                 User current = User.getInstance();
-
-                current.updateEndoInfo(usernameEndo.toString(),passwordEndo.toString());
-                if(current.updatePassword(oldPassTxt.toString(),newPassTxt.toString())){
+                if(!oldPass.equals("") || !newPass.equals("")){
+                    if(newPass.length()<6){
+                        errorText.setText("Password must be at least 6 characters");
+                        return;
+                    }
+                    if(current.updatePassword(oldPass,newPass)){
                     Intent saveIntent = new Intent(getApplicationContext(),StorageIntent.class);
                     startService(saveIntent);
                     finish();
                 }else{
                     errorText.setText("Current password is incorrect");
+                    return;
+                    }
+                }
+
+                if(!endoUsername.equals(current.getApp_username()) || !endoPassword.equals("")){
+                    current.updateEndoInfo(endoUsername,endoPassword);
+                    Intent save = new Intent(getApplicationContext(),StorageIntent.class);
+                    startService(save);
+                    finish();
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        User current = User.getInstance();
+        usernameEndo.setText(current.getEndo_username());
     }
 }

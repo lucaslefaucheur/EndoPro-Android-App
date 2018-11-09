@@ -69,7 +69,7 @@ public class User implements Serializable {
     }
 
     public ArrayList<EndoProWorkout> getWorkouts_filtered() {
-        if(workouts_filtered.size()==0)
+        if(workouts_filtered==null || workouts_filtered.size()==0)
             return workouts;
         return  workouts_filtered;
     }
