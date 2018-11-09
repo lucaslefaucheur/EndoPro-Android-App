@@ -8,6 +8,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import comp354.concordia.endopro.Common.EndoProWorkout;
 import comp354.concordia.endopro.Common.User;
@@ -38,7 +39,7 @@ public class EndoProGraph {
     }
 
     public void organizeWorkouts() {
-        // organize in chronological order
+        Collections.reverse(workouts);
 
     }
 
