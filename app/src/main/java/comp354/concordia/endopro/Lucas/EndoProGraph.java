@@ -34,14 +34,8 @@ public class EndoProGraph {
             if (workouts.get(i).getDistance() > max_distance)
                 max_distance = workouts.get(i).getDistance();
         }
-
-        organizeWorkouts();
     }
 
-    public void organizeWorkouts() {
-        Collections.reverse(workouts);
-
-    }
 
     public void createHistorySpeedGraph() {
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>();

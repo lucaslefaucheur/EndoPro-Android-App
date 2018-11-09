@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collections;
 import java.util.UUID;
 
 import comp354.concordia.endopro.Common.EndoProWorkout;
@@ -58,6 +59,9 @@ public class FetchActivity extends AppCompatActivity {
     private void toDashboard(){
         Intent dashboard = new Intent(getApplicationContext(),Dashboard.class);
         startActivity(dashboard);
+        Collections.reverse(User.getInstance().getWorkouts());
+        Intent save = new Intent(getApplicationContext(), StorageIntent.class);
+        startService(save);
         finish();
     }
     private void getToken(){
@@ -147,7 +151,6 @@ public class FetchActivity extends AppCompatActivity {
                 if (currentWorkout.has("duration")) dur = currentWorkout.getDouble("duration");
                 if (currentWorkout.has("start_time"))
                     start = currentWorkout.getString("start_time");
-
 
                 user.addWorkout(new EndoProWorkout(avg, max, dist, dur, start));
             }
