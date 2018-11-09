@@ -13,6 +13,7 @@ import com.jjoe64.graphview.GraphView;
 
 import comp354.concordia.endopro.Common.User;
 import comp354.concordia.endopro.DanielT.Filtering;
+import comp354.concordia.endopro.Earl.FetchActivity;
 import comp354.concordia.endopro.Hong.Settings;
 import comp354.concordia.endopro.Hong.StorageIntent;
 import comp354.concordia.endopro.R;
@@ -96,12 +97,22 @@ public class Dashboard extends AppCompatActivity {
             }
         });
 
-        ImageButton filter = findViewById(R.id.filter_dashboard);
+        final ImageButton filter = findViewById(R.id.filter_dashboard);
         filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent filter = new Intent(getApplicationContext(),Filtering.class);
                 startActivity(filter);
+            }
+        });
+
+        ImageButton refresh = findViewById(R.id.refresh_dashboard);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent fetch = new Intent(getApplicationContext(),FetchActivity.class);
+                startActivity(fetch);
+                finish();
             }
         });
 
