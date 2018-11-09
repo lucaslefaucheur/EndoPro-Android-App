@@ -128,6 +128,8 @@ public class FetchActivity extends AppCompatActivity {
     }
 
     private void storeWorkouts(JSONArray workouts) throws JSONException {
+        User user=User.getInstance();
+        user.clearWorkouts();
         for (int i = 0; i < workouts.length(); ++i) {
             JSONObject currentWorkout = workouts.getJSONObject(i);
             if (currentWorkout.getInt("sport") == 2) //2 stands for cycling sport
@@ -146,7 +148,7 @@ public class FetchActivity extends AppCompatActivity {
                 if (currentWorkout.has("start_time"))
                     start = currentWorkout.getString("start_time");
 
-                User user=User.getInstance();
+
                 user.addWorkout(new EndoProWorkout(avg, max, dist, dur, start));
             }
         }
