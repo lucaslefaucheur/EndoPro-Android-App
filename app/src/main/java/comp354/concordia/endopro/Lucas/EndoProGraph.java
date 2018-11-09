@@ -17,12 +17,22 @@ public class EndoProGraph {
     ArrayList<EndoProWorkout> workouts;
     GraphView graph;
 
+    double max_speed_average = 0;
+    double max_distance = 0;
+
     public EndoProGraph(GraphView graph, User user) {
         this.graph = graph;
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setYAxisBoundsManual(true);
 
         workouts = user.getWorkouts_filtered();
+
+        for (int i = 0; i < workouts.size(); i++) {
+            if (workouts.get(i).getSpeedAverage() > max_speed_average)
+                max_speed_average = workouts.get(i).getSpeedAverage();
+            if (workouts.get(i).getDistance() > max_distance)
+                max_distance = workouts.get(i).getDistance();
+        }
 
         organizeWorkouts();
     }
@@ -60,7 +70,7 @@ public class EndoProGraph {
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(x+1);
         graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(80);
+        graph.getViewport().setMaxY(max_speed_average);
         graph.addSeries(series);
     }
 
@@ -100,7 +110,7 @@ public class EndoProGraph {
         graph.getViewport().setMinX(2013);
         graph.getViewport().setMaxX(2019);
         graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(80);
+        graph.getViewport().setMaxY(max_speed_average);
         graph.addSeries(series);
     }
 
@@ -155,7 +165,7 @@ public class EndoProGraph {
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(13);
         graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(80);
+        graph.getViewport().setMaxY(max_speed_average);
         graph.addSeries(series);
     }
 
@@ -187,7 +197,7 @@ public class EndoProGraph {
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(x+1);
         graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(150);
+        graph.getViewport().setMaxY(max_distance);
         graph.addSeries(series);
     }
 
@@ -227,7 +237,7 @@ public class EndoProGraph {
         graph.getViewport().setMinX(2013);
         graph.getViewport().setMaxX(2019);
         graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(150);
+        graph.getViewport().setMaxY(max_distance);
         graph.addSeries(series);
     }
 
@@ -282,7 +292,7 @@ public class EndoProGraph {
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(13);
         graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(150);
+        graph.getViewport().setMaxY(max_distance);
         graph.addSeries(series);
     }
 
