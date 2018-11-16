@@ -1,5 +1,7 @@
 package comp354.concordia.endopro.Lucas;
 
+import android.graphics.Color;
+
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
@@ -55,15 +57,36 @@ public class EndoProGraph {
 
 
     public void createHistorySpeedGraph() {
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>();
-        series.setDrawDataPoints(true);
+        LineGraphSeries<DataPoint> series1 = new LineGraphSeries<DataPoint>();
+        series1.setDrawDataPoints(true);
 
-        double x = 0, y;
+        double x1 = 0, y1;
 
         for (int i = 0; i < workouts.size(); i++) {
-            x++;
-            y = workouts.get(i).getSpeedAverage();
-            series.appendData(new DataPoint(x, y), true, workouts.size());
+            x1++;
+            y1 = workouts.get(i).getSpeedAverage();
+            series1.appendData(new DataPoint(x1, y1), true, workouts.size());
+        }
+
+        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>();
+        series2.setColor(Color.GREEN);
+
+        double x2 = 0.0, y2 = 0.0;
+
+        for (int i = 0; i < workouts.size(); i++) {
+            x2++;
+
+            double count = 0.0;
+            y2 = 0.0;
+            for (int j = 0; j < 10; j++) {
+                if (i - j >= 0) {
+                    count++;
+                    y2 += workouts.get(i - j).getSpeedAverage();
+                }
+            }
+            y2 /= count;
+
+            series2.appendData(new DataPoint(x2, y2), true, workouts.size());
         }
 
         graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
@@ -80,10 +103,12 @@ public class EndoProGraph {
         graph.removeAllSeries();
         graph.setTitle("History of all average speeds");
         graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(x+1);
+        graph.getViewport().setMaxX(x1+1);
         graph.getViewport().setMinY(min_speed_average);
         graph.getViewport().setMaxY(max_speed_average);
-        graph.addSeries(series);
+
+        graph.addSeries(series1);
+        graph.addSeries(series2);
     }
 
     public void createYearlySpeedGraph() {
@@ -182,15 +207,36 @@ public class EndoProGraph {
     }
 
     public void createHistoryDistanceGraph() {
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>();
-        series.setDrawDataPoints(true);
+        LineGraphSeries<DataPoint> series1 = new LineGraphSeries<DataPoint>();
+        series1.setDrawDataPoints(true);
 
-        double x = 0, y;
+        double x1 = 0, y1;
 
         for (int i = 0; i < workouts.size(); i++) {
-            x++;
-            y = workouts.get(i).getDistance();
-            series.appendData(new DataPoint(x, y), true, workouts.size());
+            x1++;
+            y1 = workouts.get(i).getDistance();
+            series1.appendData(new DataPoint(x1, y1), true, workouts.size());
+        }
+
+        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>();
+        series2.setColor(Color.GREEN);
+
+        double x2 = 0.0, y2 = 0.0;
+
+        for (int i = 0; i < workouts.size(); i++) {
+            x2++;
+
+            double count = 0.0;
+            y2 = 0.0;
+            for (int j = 0; j < 10; j++) {
+                if (i - j >= 0) {
+                    count++;
+                    y2 += workouts.get(i - j).getDistance();
+                }
+            }
+            y2 /= count;
+
+            series2.appendData(new DataPoint(x2, y2), true, workouts.size());
         }
 
         graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
@@ -207,10 +253,11 @@ public class EndoProGraph {
         graph.removeAllSeries();
         graph.setTitle("History of all distances");
         graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(x+1);
+        graph.getViewport().setMaxX(x1+1);
         graph.getViewport().setMinY(min_distance);
         graph.getViewport().setMaxY(max_distance);
-        graph.addSeries(series);
+        graph.addSeries(series1);
+        graph.addSeries(series2);
     }
 
     public void createYearlyDistanceGraph() {
