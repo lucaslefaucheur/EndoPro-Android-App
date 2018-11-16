@@ -9,4 +9,6 @@
     <color name="whiteText">#c4c2c2</color>
     <color name="accentText">#32184d</color>
     <color name="accentBtn">#541160</color>
+    <color name="TempHigh">#E82321</color>
+    <color name="TempLow">#34CAFF</color>
 </resources>

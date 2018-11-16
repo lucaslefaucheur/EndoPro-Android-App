@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">EndoPro</string>
     <string name="title_activity_settings">Settings</string>
+
+    <string name="task_2">Task 2</string>
+    <string name="logout">Logout</string>
+    <string name="task1">Task 1</string>
+    <string name="task3">Task 3</string>
+    <string name="avgTemp">Average Temperature:</string>
+    <string name="avgWindSpeed">Average wind speed:</string>
+    <string name="highTemp">Highest temperature:</string>
+    <string name="lowTemp">Lowest temperature:</string>
+    <string name="degreeC">°C</string>
 </resources>
