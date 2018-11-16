@@ -18,7 +18,9 @@ public class EndoProGraph {
     ArrayList<EndoProWorkout> workouts;
     GraphView graph;
 
+    double min_speed_average = 0;
     double max_speed_average = 0;
+    double min_distance = 0;
     double max_distance = 0;
 
     public EndoProGraph(GraphView graph, User user) {
@@ -34,6 +36,21 @@ public class EndoProGraph {
             if (workouts.get(i).getDistance() > max_distance)
                 max_distance = workouts.get(i).getDistance();
         }
+
+        min_speed_average = max_speed_average;
+        min_distance = max_distance;
+
+        for (int i = 0; i < workouts.size(); i++) {
+            if (workouts.get(i).getSpeedAverage() < min_speed_average)
+                min_speed_average = workouts.get(i).getSpeedAverage();
+            if(workouts.get(i).getDistance() < min_distance)
+                min_distance = workouts.get(i).getDistance();
+        }
+
+        min_distance -= 10;
+        min_speed_average -= 2;
+        max_distance += 10;
+        max_speed_average += 2;
     }
 
 
@@ -64,7 +81,7 @@ public class EndoProGraph {
         graph.setTitle("History of all average speeds");
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(x+1);
-        graph.getViewport().setMinY(0);
+        graph.getViewport().setMinY(min_speed_average);
         graph.getViewport().setMaxY(max_speed_average);
         graph.addSeries(series);
     }
@@ -104,7 +121,7 @@ public class EndoProGraph {
         graph.setTitle("Yearly averages of average speeds");
         graph.getViewport().setMinX(2013);
         graph.getViewport().setMaxX(2019);
-        graph.getViewport().setMinY(0);
+        graph.getViewport().setMinY(min_speed_average);
         graph.getViewport().setMaxY(max_speed_average);
         graph.addSeries(series);
     }
@@ -159,7 +176,7 @@ public class EndoProGraph {
         graph.setTitle("Monthly averages of average speeds");
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(13);
-        graph.getViewport().setMinY(0);
+        graph.getViewport().setMinY(min_speed_average);
         graph.getViewport().setMaxY(max_speed_average);
         graph.addSeries(series);
     }
@@ -191,7 +208,7 @@ public class EndoProGraph {
         graph.setTitle("History of all distances");
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(x+1);
-        graph.getViewport().setMinY(0);
+        graph.getViewport().setMinY(min_distance);
         graph.getViewport().setMaxY(max_distance);
         graph.addSeries(series);
     }
@@ -231,7 +248,7 @@ public class EndoProGraph {
         graph.setTitle("Yearly averages of distances");
         graph.getViewport().setMinX(2013);
         graph.getViewport().setMaxX(2019);
-        graph.getViewport().setMinY(0);
+        graph.getViewport().setMinY(min_distance);
         graph.getViewport().setMaxY(max_distance);
         graph.addSeries(series);
     }
@@ -286,7 +303,7 @@ public class EndoProGraph {
         graph.setTitle("Monthly averages of distances");
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(13);
-        graph.getViewport().setMinY(0);
+        graph.getViewport().setMinY(min_distance);
         graph.getViewport().setMaxY(max_distance);
         graph.addSeries(series);
     }
