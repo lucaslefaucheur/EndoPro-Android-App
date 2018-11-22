@@ -1,4 +1,4 @@
-package comp354.concordia.endopro.Hong;
+package comp354.concordia.endopro.Intents;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.util.Log;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 
-import comp354.concordia.endopro.Common.User;
+import comp354.concordia.endopro.User.UserController;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -31,10 +31,10 @@ public class StorageIntent extends IntentService {
         try {
             outputStream = openFileOutput("endoData.txt", Context.MODE_PRIVATE);
             ObjectOutputStream object = new ObjectOutputStream(outputStream);
-            object.writeObject(User.getApp_data());
+            object.writeObject(UserController.getInstance().getApp_data());
             outputStream.close();
             object.close();
-            Log.i(TAG, "saveToDB: "+User.getApp_data().getCount()+" users in database");
+            Log.i(TAG, "saveToDB:");
         } catch (Exception e1) {
             e1.printStackTrace();
             Log.e(TAG, "saveToDB: ", e1);

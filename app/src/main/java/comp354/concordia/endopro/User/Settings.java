@@ -1,16 +1,15 @@
-package comp354.concordia.endopro.Hong;
+package comp354.concordia.endopro.User;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import comp354.concordia.endopro.Common.User;
+import comp354.concordia.endopro.Intents.StorageIntent;
 import comp354.concordia.endopro.R;
 
 public class Settings extends AppCompatActivity {
@@ -49,13 +48,12 @@ public class Settings extends AppCompatActivity {
                 String endoUsername = usernameEndo.getText().toString();
                 String endoPassword = passwordEndo.getText().toString();
 
-                User current = User.getInstance();
                 if(!oldPass.equals("") || !newPass.equals("")){
                     if(newPass.length()<6){
                         errorText.setText("Password must be at least 6 characters");
                         return;
                     }
-                    if(current.updatePassword(oldPass,newPass)){
+                    if(UserController.getInstance().updateAppPassword(oldPass,newPass)){
                     Intent saveIntent = new Intent(getApplicationContext(),StorageIntent.class);
                     startService(saveIntent);
                     finish();
@@ -65,8 +63,9 @@ public class Settings extends AppCompatActivity {
                     }
                 }
 
-                if(!endoUsername.equals(current.getApp_username()) || !endoPassword.equals("")){
-                    current.updateEndoInfo(endoUsername,endoPassword);
+                if(!endoUsername.equals(UserController.getInstance().getCurrentUser().getApp_username()) ||
+                        !endoPassword.equals("")){
+                    UserController.getInstance().updateEndoInfo(endoUsername,endoPassword);
                     Intent save = new Intent(getApplicationContext(),StorageIntent.class);
                     startService(save);
                     finish();
@@ -78,7 +77,8 @@ public class Settings extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        User current = User.getInstance();
-        usernameEndo.setText(current.getEndo_username());
+        User current = UserController.getInstance().getCurrentUser();
+        if(current!=null)
+            usernameEndo.setText(current.getEndo_username());
     }
 }

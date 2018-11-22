@@ -17,14 +17,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Hong.Settings" />
-        <activity android:name=".Hong.SignUp" />
-        <activity android:name=".Hong.test" />
-        <activity android:name=".DanielT.Filtering"></activity>
-        <activity android:name="comp354.concordia.endopro.Lucas.Dashboard"></activity>
-        <activity android:name="comp354.concordia.endopro.Earl.FetchActivity"/>
+        <activity android:name=".User.Settings" />
+        <activity android:name=".User.SignUp" />
+        <activity android:name=".Graph.Filtering"></activity>
+        <activity android:name="comp354.concordia.endopro.Dashboard"></activity>
+        <activity android:name="comp354.concordia.endopro.Graph.FetchActivity"/>
         <service
-            android:name=".Hong.StorageIntent"
+            android:name=".Intents.StorageIntent"
             android:exported="false"></service>
     </application>
 

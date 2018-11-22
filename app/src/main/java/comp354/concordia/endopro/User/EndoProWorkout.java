@@ -1,4 +1,4 @@
-package comp354.concordia.endopro.Common;
+package comp354.concordia.endopro.User;
 
 import java.io.Serializable;
 

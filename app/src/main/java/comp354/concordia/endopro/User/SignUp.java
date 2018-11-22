@@ -1,4 +1,4 @@
-package comp354.concordia.endopro.Hong;
+package comp354.concordia.endopro.User;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import comp354.concordia.endopro.Common.User;
-import comp354.concordia.endopro.MainActivity;
+import comp354.concordia.endopro.Intents.StorageIntent;
+import comp354.concordia.endopro.Exceptions.ValidationException;
 import comp354.concordia.endopro.R;
 
 public class SignUp extends AppCompatActivity {
@@ -65,10 +65,10 @@ public class SignUp extends AppCompatActivity {
             validateInput(app_username,app_password);
             //Input is valid, proceed to account creation
 
-            if(User.getApp_data().getUser(app_username)==null){
+            if(UserController.getInstance().getApp_data().getAllUsers().get(app_username)==null){
                 //User doesn't exist, proceed to create
-
-                User.setInstance(app_username,app_password,endo_username,endo_password);
+                User userToCreate=new User(app_username,app_password,endo_username,endo_password);
+                UserController.getInstance().signUp(userToCreate);
 
                 Intent DB = new Intent(getApplicationContext(),StorageIntent.class);
                 startService(DB);

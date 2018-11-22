@@ -14,14 +14,13 @@ import android.widget.TextView;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
-import comp354.concordia.endopro.Common.User;
-import comp354.concordia.endopro.DanielT.Filtering;
-import comp354.concordia.endopro.Earl.FetchActivity;
-import comp354.concordia.endopro.Hong.App_Data;
-import comp354.concordia.endopro.Hong.AuthenticationException;
-import comp354.concordia.endopro.Hong.SignUp;
-import comp354.concordia.endopro.Hong.StorageIntent;
-import comp354.concordia.endopro.Hong.test;
+import comp354.concordia.endopro.Graph.FetchActivity;
+import comp354.concordia.endopro.User.User;
+import comp354.concordia.endopro.User.App_Data;
+import comp354.concordia.endopro.Exceptions.AuthenticationException;
+import comp354.concordia.endopro.User.SignUp;
+import comp354.concordia.endopro.Intents.StorageIntent;
+import comp354.concordia.endopro.User.UserController;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
             App_Data data =(App_Data)object.readObject();
 
-            User.setApp_data(data);
+            UserController.getInstance().setApp_data(data);
 
             file.close();
             object.close();
@@ -55,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.i(TAG, "handleActionRead: "+e.getMessage());
             Log.i(TAG, "handleActionRead: File not found!");
-            User.setApp_data(new App_Data());
+            UserController.getInstance().setApp_data(new App_Data());
         }
 
         Intent save = new Intent(getApplicationContext(),StorageIntent.class);
@@ -103,14 +102,10 @@ public class MainActivity extends AppCompatActivity {
             If no user is signed in or the previous user chose not to auto sign in,
             this step will be skipped.
          */
-
-        if(User.getInstance()==null){
-            if(User.getApp_data().getCached()==null)
-                return;
-            User.setInstance(User.getApp_data().getCached());
+        if(UserController.getInstance().getCurrentUser()!=null){
+            TransitionToDashboard();
             Log.i(TAG, "checkSignedUser: Auto Signing in user");
         }
-        TransitionToDashboard();
     }
 
     private void handleSignin(boolean autoAuth){
@@ -131,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
                     Transition to data fetcher activity that will handle collecting
                     data from Endomondo
                 */
-                if(autoAuth && User.getApp_data().getCached()==null){
-                    User.rememberUser();
+                if(autoAuth){
+                    UserController.getInstance().autoSignIn();
                     Intent save = new Intent(getApplicationContext(),StorageIntent.class);
                     startService(save);
                 }
@@ -164,12 +159,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean verifyCredential(String username, String password)
             throws AuthenticationException {
 
-        User user = User.getApp_data().getUser(username);
-
+        User user = UserController.getInstance().Authenticate(username,password);
         if(user==null) throw new AuthenticationException("User not found");
-
-        User.setInstance(user);
-        return user.Authenticate(username,password);
+        return true;
     }
 
     private void clearError(){

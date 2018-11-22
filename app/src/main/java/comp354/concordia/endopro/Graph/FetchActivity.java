@@ -1,4 +1,4 @@
-package comp354.concordia.endopro.Earl;
+package comp354.concordia.endopro.Graph;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,11 +23,12 @@ import org.json.JSONObject;
 import java.util.Collections;
 import java.util.UUID;
 
-import comp354.concordia.endopro.Common.EndoProWorkout;
-import comp354.concordia.endopro.Common.User;
-import comp354.concordia.endopro.Hong.StorageIntent;
-import comp354.concordia.endopro.Lucas.Dashboard;
+import comp354.concordia.endopro.Dashboard;
 import comp354.concordia.endopro.R;
+import comp354.concordia.endopro.User.EndoProWorkout;
+import comp354.concordia.endopro.User.User;
+import comp354.concordia.endopro.Intents.StorageIntent;
+import comp354.concordia.endopro.User.UserController;
 
 public class FetchActivity extends AppCompatActivity {
     private static final String TAG="endopro_logi_data_fetcher";
@@ -59,19 +60,21 @@ public class FetchActivity extends AppCompatActivity {
     private void toDashboard(){
         Intent dashboard = new Intent(getApplicationContext(),Dashboard.class);
         startActivity(dashboard);
-        Collections.reverse(User.getInstance().getWorkouts());
+        User user = UserController.getInstance().getCurrentUser();
+        Collections.reverse(user.getWorkouts());
         Intent save = new Intent(getApplicationContext(), StorageIntent.class);
         startService(save);
         finish();
     }
     private void getToken(){
+        User user=UserController.getInstance().getCurrentUser();
         String request_url =
             AuthPrefix
             +"deviceId="+UUID.randomUUID().toString()+"&"
             +"country=pl&"
             +"action=pair&"
-            +"email="+User.getInstance().getEndo_username()+"&"
-            +"password="+User.getInstance().getEndo_password();
+            +"email="+user.getEndo_username()+"&"
+            +"password="+user.getEndo_password();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, request_url,
                 new Response.Listener<String>() {
@@ -132,8 +135,7 @@ public class FetchActivity extends AppCompatActivity {
     }
 
     private void storeWorkouts(JSONArray workouts) throws JSONException {
-        User user=User.getInstance();
-        user.clearWorkouts();
+        UserController.getInstance().clearWorkouts();
         for (int i = 0; i < workouts.length(); ++i) {
             JSONObject currentWorkout = workouts.getJSONObject(i);
             if (currentWorkout.getInt("sport") == 2) //2 stands for cycling sport
@@ -152,7 +154,7 @@ public class FetchActivity extends AppCompatActivity {
                 if (currentWorkout.has("start_time"))
                     start = currentWorkout.getString("start_time");
 
-                user.addWorkout(new EndoProWorkout(avg, max, dist, dur, start));
+                UserController.getInstance().addWorkout(new EndoProWorkout(avg, max, dist, dur, start));
             }
         }
     }

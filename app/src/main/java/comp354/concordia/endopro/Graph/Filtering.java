@@ -1,5 +1,4 @@
-package comp354.concordia.endopro.DanielT;
-import android.content.Intent;
+package comp354.concordia.endopro.Graph;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,14 +8,12 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.util.Random;
-
 import java.util.ArrayList;
 
-import comp354.concordia.endopro.Common.EndoProWorkout;
-import comp354.concordia.endopro.Common.User;
-import comp354.concordia.endopro.Lucas.Dashboard;
+import comp354.concordia.endopro.User.EndoProWorkout;
+import comp354.concordia.endopro.User.User;
 import comp354.concordia.endopro.R;
+import comp354.concordia.endopro.User.UserController;
 
 public class Filtering extends AppCompatActivity {
     Button btn;
@@ -31,7 +28,7 @@ public class Filtering extends AppCompatActivity {
     int max = 300;
     int max2 = 500;
 
-    User user = User.getInstance();
+    User user = UserController.getInstance().getCurrentUser();
 
     TextView starttime;
     TextView distance;
@@ -119,7 +116,7 @@ public class Filtering extends AppCompatActivity {
         filterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user.setFilteredWorkout(null);
+                UserController.getInstance().setFilteredWorkout(null);
             }
         });
 
@@ -141,7 +138,7 @@ public class Filtering extends AppCompatActivity {
                     speed.setText("");
                     distance.setText("");
                     ArrayList<EndoProWorkout> filter = new ArrayList<EndoProWorkout>();
-                    user.setFilteredWorkout(myworkouts);
+                    UserController.getInstance().setFilteredWorkout(myworkouts);
                     for(int i = 0;i < myworkouts.size();i++){
                         if(seekbar2.getProgress() >= myworkouts.get(i).getSpeedAverage() && seekbar1.getProgress() >= myworkouts.get(i).getDistance() ) {
                             starttime.append(myworkouts.get(i).getStartTime() + "\n");
@@ -150,7 +147,7 @@ public class Filtering extends AppCompatActivity {
                             filter.add(myworkouts.get(i));
                         }
                     }
-                    user.setFilteredWorkout(filter);
+                    UserController.getInstance().setFilteredWorkout(filter);
                     finish();
 
                 } catch (Exception e) {starttime.setText("Error"); }

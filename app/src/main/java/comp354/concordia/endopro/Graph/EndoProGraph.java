@@ -1,4 +1,4 @@
-package comp354.concordia.endopro.Lucas;
+package comp354.concordia.endopro.Graph;
 
 import android.graphics.Color;
 
@@ -10,10 +10,9 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
-import comp354.concordia.endopro.Common.EndoProWorkout;
-import comp354.concordia.endopro.Common.User;
+import comp354.concordia.endopro.User.EndoProWorkout;
+import comp354.concordia.endopro.User.User;
 
 public class EndoProGraph {
 
@@ -30,7 +29,7 @@ public class EndoProGraph {
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setYAxisBoundsManual(true);
 
-        workouts = user.getWorkouts_filtered();
+        workouts = user.getWorkouts();
 
         for (int i = 0; i < workouts.size(); i++) {
             if (workouts.get(i).getSpeedAverage() > max_speed_average)

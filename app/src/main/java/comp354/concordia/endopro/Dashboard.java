@@ -1,4 +1,4 @@
-package comp354.concordia.endopro.Lucas;
+package comp354.concordia.endopro;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -11,12 +11,13 @@ import android.widget.ImageButton;
 
 import com.jjoe64.graphview.GraphView;
 
-import comp354.concordia.endopro.Common.User;
-import comp354.concordia.endopro.DanielT.Filtering;
-import comp354.concordia.endopro.Earl.FetchActivity;
-import comp354.concordia.endopro.Hong.Settings;
-import comp354.concordia.endopro.Hong.StorageIntent;
-import comp354.concordia.endopro.R;
+import comp354.concordia.endopro.Graph.EndoProGraph;
+import comp354.concordia.endopro.Graph.FetchActivity;
+import comp354.concordia.endopro.Graph.Filtering;
+import comp354.concordia.endopro.User.User;
+import comp354.concordia.endopro.User.Settings;
+import comp354.concordia.endopro.Intents.StorageIntent;
+import comp354.concordia.endopro.User.UserController;
 
 public class Dashboard extends AppCompatActivity {
     private static final String TAG="endopro_logi_dashboard";
@@ -81,7 +82,7 @@ public class Dashboard extends AppCompatActivity {
         signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User.signOut();
+                UserController.getInstance().signOut();
                 Intent save = new Intent(getApplicationContext(),StorageIntent.class);
                 startService(save);
                 finish();
@@ -122,7 +123,7 @@ public class Dashboard extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        User user = User.getInstance();
+        User user = UserController.getInstance().getCurrentUser();
         endoProGraph = new EndoProGraph((GraphView) findViewById(R.id.graph), user);
     }
 }

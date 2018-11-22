@@ -1,4 +1,4 @@
-package comp354.concordia.endopro.Hong;
+package comp354.concordia.endopro.Exceptions;
 
 public class CriticalError extends Exception {
     CriticalError(String errMessage){
