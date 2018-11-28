@@ -1,5 +1,6 @@
 package comp354.concordia.endopro;
 
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +14,16 @@ import android.widget.TextView;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import comp354.concordia.endopro.Common.User;
 import comp354.concordia.endopro.DanielT.Filtering;
 import comp354.concordia.endopro.Earl.FetchActivity;
+import comp354.concordia.endopro.GroupF.Weather.DatabaseAction.CleanDBAsync;
+import comp354.concordia.endopro.GroupF.Weather.DatabaseAction.QueryDbAsync;
+import comp354.concordia.endopro.GroupF.Weather.WeatherDatabase;
+import comp354.concordia.endopro.GroupF.Weather.WeatherEntity;
 import comp354.concordia.endopro.Hong.App_Data;
 import comp354.concordia.endopro.Hong.AuthenticationException;
 import comp354.concordia.endopro.Hong.SignUp;
@@ -60,6 +67,25 @@ public class MainActivity extends AppCompatActivity {
 
         Intent save = new Intent(getApplicationContext(),StorageIntent.class);
         startService(save);
+
+//        Create the link with local database
+        WeatherDatabase db = Room.databaseBuilder(getApplicationContext(),
+                WeatherDatabase.class, "weather-db").build();
+
+//        Get today's and the past X's days data.
+        LocalDate curr = LocalDate.now();
+
+        int nbWeatherEntries = 7;
+        WeatherEntity[] dataEntries = new WeatherEntity[nbWeatherEntries];
+        for (int i = 0; i < nbWeatherEntries; i++) {
+
+            String day = curr.minusDays(i).toString();
+            new QueryDbAsync(db, day).execute();
+        }
+
+//        Clean the database from unused entries
+        new CleanDBAsync(db, curr.minusDays(nbWeatherEntries).atStartOfDay(ZoneId.systemDefault()).toEpochSecond()).execute();
+
 
         //Get all UI elements
         errorText = findViewById(R.id.errorText_main);

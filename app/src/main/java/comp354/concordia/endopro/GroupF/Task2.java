@@ -1,7 +1,6 @@
 package comp354.concordia.endopro.GroupF;
 
 import android.arch.persistence.room.Room;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -35,8 +34,6 @@ public class Task2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_task2);
-
-        Intent intent = getIntent();
 
 //        Create the link with local database
         WeatherDatabase db = Room.databaseBuilder(getApplicationContext(),
@@ -83,11 +80,6 @@ public class Task2 extends AppCompatActivity {
             xAxes.add(i, x);
         }
 
-//        String[] xaxes = new String[xAxes.size()];
-//        for (int i = 0; i < xAxes.size(); i++) {
-//            xaxes[i] = xAxes.get(i);
-//        }
-
         ArrayList<ILineDataSet> lineDataSets = new ArrayList<>();
 
         LineDataSet lineDataSetTemp = new LineDataSet(yAxesTemp, "Average Temperature " + getString(R.string.degreeC));
@@ -122,12 +114,6 @@ public class Task2 extends AppCompatActivity {
                 return xAxes.get((int) value);
             }
         });
-
-
-
-
-
-//        lineChart.setVisibleXRangeMaximum(65f);
 
     }
 }

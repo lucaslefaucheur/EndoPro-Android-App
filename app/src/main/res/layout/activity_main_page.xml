@@ -13,14 +13,14 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
         android:onClick="onClick"
         android:text="@string/task_2"
         app:layout_constraintBottom_toTopOf="@+id/task3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintTop_toBottomOf="@+id/task1" />
 
     <Button
         android:id="@+id/logout"
@@ -28,9 +28,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="128dp"
+        android:layout_marginBottom="8dp"
         android:background="@android:color/holo_red_dark"
         android:onClick="onClick"
         android:text="@string/logout"
@@ -48,24 +47,25 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="95dp"
+        android:onClick="onClick"
         android:text="@string/task3"
         app:layout_constraintBottom_toTopOf="@+id/logout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/task2" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/task1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="136dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="24dp"
+        android:onClick="onClick"
         android:text="@string/task1"
         app:layout_constraintBottom_toTopOf="@+id/task2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="spread_inside" />
+        app:layout_constraintVertical_chainStyle="packed" />
 </android.support.constraint.ConstraintLayout>

@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import comp354.concordia.endopro.Common.EndoProWorkout;
 import comp354.concordia.endopro.Common.User;
+import comp354.concordia.endopro.GroupF.MainPage;
 import comp354.concordia.endopro.Hong.StorageIntent;
 import comp354.concordia.endopro.Lucas.Dashboard;
 import comp354.concordia.endopro.R;
@@ -57,11 +58,8 @@ public class FetchActivity extends AppCompatActivity {
     }
 
     private void toDashboard(){
-        Intent dashboard = new Intent(getApplicationContext(),Dashboard.class);
-        startActivity(dashboard);
-        Collections.reverse(User.getInstance().getWorkouts());
-        Intent save = new Intent(getApplicationContext(), StorageIntent.class);
-        startService(save);
+        Intent mainPage = new Intent(getApplicationContext(), MainPage.class);
+        startActivity(mainPage);
         finish();
     }
     private void getToken(){
