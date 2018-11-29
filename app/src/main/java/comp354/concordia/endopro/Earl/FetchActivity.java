@@ -151,6 +151,8 @@ public class FetchActivity extends AppCompatActivity {
                     start = currentWorkout.getString("start_time");
 
                 user.addWorkout(new EndoProWorkout(avg, max, dist, dur, start));
+                System.out.println(String.format("%s;%s;%s;%s;%s",
+                        avg,max,dist,dur,start));
             }
         }
     }

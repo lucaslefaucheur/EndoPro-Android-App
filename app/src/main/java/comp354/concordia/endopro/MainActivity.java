@@ -3,6 +3,7 @@ package comp354.concordia.endopro;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setContentView(R.layout.activity_main);
+
+        //        Change thread policy to allow https request
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         FileInputStream file=null;
         try {

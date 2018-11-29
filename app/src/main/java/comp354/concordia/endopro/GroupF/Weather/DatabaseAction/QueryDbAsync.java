@@ -116,6 +116,8 @@ public final class QueryDbAsync extends AsyncTask<Void, Void, WeatherEntity> {
         String jsonString = sb.toString();
         System.out.println("JSON: " + jsonString);
 
+        urlConnection.disconnect();
+
         return new JSONObject(jsonString);
     }
 }
