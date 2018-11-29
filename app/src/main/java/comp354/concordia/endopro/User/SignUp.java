@@ -84,7 +84,11 @@ public class SignUp extends AppCompatActivity {
     private void validateInput(String username, String password) throws ValidationException{
         if(username.length()<4)
             throw new ValidationException("Username must be at least 4 characters");
+        if(username.length()>25)
+            throw new ValidationException("Username cannot be more than 25 characters");
         if(password.length()<6)
             throw new ValidationException("Password must be at least 6 characters");
+        if(password.length()>50)
+            throw new ValidationException("Password cannot be most than 50 characters");
     }
 }
