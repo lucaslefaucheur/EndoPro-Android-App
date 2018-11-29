@@ -5,6 +5,8 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Objects;
 
 @Entity(tableName = "weather_table")
@@ -12,56 +14,37 @@ public class WeatherEntity {
 
     private String city;
 
-    @PrimaryKey(autoGenerate=true)
+    @PrimaryKey(autoGenerate = true)
     private int uid;
 
     private String date;
     private long date_epoch;
-
     private float maxtemp_c;
     private float maxtemp_f;
     private float mintemp_c;
     private float mintemp_f;
     private float avgtemp_c;
     private float avgtemp_f;
-    private float maxwind_mph;
-    private float maxwind_kph;
     private float avgwind_mph;
     private float avgwind_kph;
     private float totalprecip_mm;
-    private float totalprecip_in;
-    private float avgvis_km;
-    private float avgvis_miles;
     private float avghumidity;
-    private float uv;
 
     @Ignore
     public WeatherEntity() {
     }
 
-    @Ignore
-    public WeatherEntity(String date) {
-        this.date = date;
-    }
-
-    public WeatherEntity(String city, String date, long date_epoch, float maxtemp_c, float maxtemp_f, float mintemp_c, float mintemp_f, float avgtemp_c, float avgtemp_f, float maxwind_mph, float maxwind_kph, float totalprecip_mm, float totalprecip_in, float avgvis_km, float avgvis_miles, float avghumidity, float uv) {
+    public WeatherEntity(String city, String date, float maxtemp_c, float maxtemp_f, float mintemp_c, float mintemp_f, float avgtemp_c, float avgtemp_f, float totalprecip_mm, float avghumidity) {
         this.city = city;
         this.date = date;
-        this.date_epoch = date_epoch;
         this.maxtemp_c = maxtemp_c;
         this.maxtemp_f = maxtemp_f;
         this.mintemp_c = mintemp_c;
         this.mintemp_f = mintemp_f;
         this.avgtemp_c = avgtemp_c;
         this.avgtemp_f = avgtemp_f;
-        this.maxwind_mph = maxwind_mph;
-        this.maxwind_kph = maxwind_kph;
         this.totalprecip_mm = totalprecip_mm;
-        this.totalprecip_in = totalprecip_in;
-        this.avgvis_km = avgvis_km;
-        this.avgvis_miles = avgvis_miles;
         this.avghumidity = avghumidity;
-        this.uv = uv;
     }
 
     public int getUid() {
@@ -94,6 +77,12 @@ public class WeatherEntity {
 
     public void setDate_epoch(long date_epoch) {
         this.date_epoch = date_epoch;
+    }
+
+    public void setDate_epoch(String date) {
+        LocalDate date_tmp = LocalDate.parse(date);
+        ZoneId zoneId = ZoneId.systemDefault();
+        this.date_epoch = date_tmp.atStartOfDay(zoneId).toEpochSecond();
     }
 
     public float getMaxtemp_c() {
@@ -144,22 +133,6 @@ public class WeatherEntity {
         this.avgtemp_f = avgtemp_f;
     }
 
-    public float getMaxwind_mph() {
-        return maxwind_mph;
-    }
-
-    public void setMaxwind_mph(float maxwind_mph) {
-        this.maxwind_mph = maxwind_mph;
-    }
-
-    public float getMaxwind_kph() {
-        return maxwind_kph;
-    }
-
-    public void setMaxwind_kph(float maxwind_kph) {
-        this.maxwind_kph = maxwind_kph;
-    }
-
     public float getAvgwind_mph() {
         return avgwind_mph;
     }
@@ -184,44 +157,12 @@ public class WeatherEntity {
         this.totalprecip_mm = totalprecip_mm;
     }
 
-    public float getTotalprecip_in() {
-        return totalprecip_in;
-    }
-
-    public void setTotalprecip_in(float totalprecip_in) {
-        this.totalprecip_in = totalprecip_in;
-    }
-
-    public float getAvgvis_km() {
-        return avgvis_km;
-    }
-
-    public void setAvgvis_km(float avgvis_km) {
-        this.avgvis_km = avgvis_km;
-    }
-
-    public float getAvgvis_miles() {
-        return avgvis_miles;
-    }
-
-    public void setAvgvis_miles(float avgvis_miles) {
-        this.avgvis_miles = avgvis_miles;
-    }
-
     public float getAvghumidity() {
         return avghumidity;
     }
 
     public void setAvghumidity(float avghumidity) {
         this.avghumidity = avghumidity;
-    }
-
-    public float getUv() {
-        return uv;
-    }
-
-    public void setUv(float uv) {
-        this.uv = uv;
     }
 
     @Override

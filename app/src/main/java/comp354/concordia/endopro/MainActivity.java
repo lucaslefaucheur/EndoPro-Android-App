@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText passwordTxt;
     private CheckBox autoAuth;
     private TextView errorText;
+    private final int NB_WEATHER_ENTRY = 14;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,16 +81,15 @@ public class MainActivity extends AppCompatActivity {
 //        Get today's and the past X's days data.
         LocalDate curr = LocalDate.now();
 
-        int nbWeatherEntries = 7;
-        WeatherEntity[] dataEntries = new WeatherEntity[nbWeatherEntries];
-        for (int i = 0; i < nbWeatherEntries; i++) {
+        WeatherEntity[] dataEntries = new WeatherEntity[NB_WEATHER_ENTRY];
+        for (int i = 0; i < NB_WEATHER_ENTRY; i++) {
 
             String day = curr.minusDays(i).toString();
             new QueryDbAsync(db, day).execute();
         }
 
 //        Clean the database from unused entries
-        new CleanDBAsync(db, curr.minusDays(nbWeatherEntries).atStartOfDay(ZoneId.systemDefault()).toEpochSecond()).execute();
+        new CleanDBAsync(db, curr.minusDays(NB_WEATHER_ENTRY).atStartOfDay(ZoneId.systemDefault()).toEpochSecond()).execute();
 
 
         //Get all UI elements

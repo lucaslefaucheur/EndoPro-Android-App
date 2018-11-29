@@ -59,21 +59,21 @@ public class Task2 extends AppCompatActivity {
 
 
 //        Display graph
-        lineChart = (LineChart) findViewById(R.id.chart);
+        lineChart = findViewById(R.id.chart);
 
         final ArrayList<String> xAxes = new ArrayList<>();
         ArrayList<Entry> yAxesTemp = new ArrayList<>();
         ArrayList<Entry> yAxesWindSpeed = new ArrayList<>();
 
+//        Set data points
         for (int i = 0; i < allWeatherEntities.size(); i++) {
             float avgTempC = allWeatherEntities.get(i).getAvgtemp_c();
             float avgWindSpeedKph = allWeatherEntities.get(i).getAvgwind_kph();
             String dateStr = allWeatherEntities.get(i).getDate();
 
+//            Format x labels
             LocalDate date = LocalDate.parse(dateStr);
-            String x = date.getDayOfWeek().name().substring(0, 3);
-
-            int reverseI = allWeatherEntities.size() - (i + 1);
+            String x = date.getMonth().name().substring(0,3) + " " +  dateStr.substring(8);
 
             yAxesTemp.add(new Entry(i, (int) avgTempC));
             yAxesWindSpeed.add(new Entry(i, (int) avgWindSpeedKph));
@@ -82,12 +82,14 @@ public class Task2 extends AppCompatActivity {
 
         ArrayList<ILineDataSet> lineDataSets = new ArrayList<>();
 
+//        Plot style average temperature
         LineDataSet lineDataSetTemp = new LineDataSet(yAxesTemp, "Average Temperature " + getString(R.string.degreeC));
         lineDataSetTemp.setDrawCircles(false);
         lineDataSetTemp.setColor(Color.rgb(52, 202, 255));
         lineDataSetTemp.setDrawValues(false);
         lineDataSetTemp.setLineWidth(3);
 
+//        Plot style average wind speed
         LineDataSet lineDataSetWindSpeed = new LineDataSet(yAxesWindSpeed, "Average Wind Speed Kph");
         lineDataSetWindSpeed.setDrawCircles(false);
         lineDataSetWindSpeed.setColor(Color.rgb(232, 35, 33));

@@ -19,6 +19,11 @@ import comp354.concordia.endopro.GroupF.Weather.WeatherEntity;
 
 public final class QueryDbAsync extends AsyncTask<Void, Void, WeatherEntity> {
 
+    private final String API_URL = "https://api.worldweatheronline.com/premium/v1/past-weather.ashx";
+    private final String API_KEY = "5cc8bb3a2dbd47bb942200929182911";
+
+    private final String CITY = "Montreal";
+
     private String date;
     private WeatherDatabase db;
 
@@ -39,47 +44,73 @@ public final class QueryDbAsync extends AsyncTask<Void, Void, WeatherEntity> {
 
 
             try {
-                JSONObject response = getJSONObjectFromURL("https://api.apixu.com/v1/history.json?key=0f3452d18d3043f4a9560342180711&q=Montreal&dt=" + date);
+                JSONObject response = getJSONObjectFromURL(
+                        String.format("%s" +
+                                        "?key=%s" +
+                                        "&q=%s" + // city
+                                        "&format=json" +
+                                        "&extra=utcDateTime" +
+                                        "&date=%s" +
+                                        "&tp=1", // tp=1 for hourly data
+                                API_URL,
+                                API_KEY,
+                                CITY,
+                                date));
 
 //                Parse the JSON response
                 WeatherEntity newEntry = new WeatherEntity();
 
-                newEntry.setCity(response.getJSONObject("location").getString("name"));
+                // JSON crawler
+                JSONObject data = response.getJSONObject("data");
+                JSONObject weather = data.getJSONArray("weather").getJSONObject(0);
+                JSONArray hourly = weather.getJSONArray("hourly");
 
-                JSONObject forecastday = response.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0);
+                // City
+                newEntry.setCity(data.getJSONArray("request").getJSONObject(0).getString("query"));
 
-                newEntry.setDate(forecastday.getString("date"));
-                newEntry.setDate_epoch(forecastday.getLong("date_epoch"));
+                // Date
+                newEntry.setDate(date);
+                newEntry.setDate_epoch(date);
 
-                JSONObject day = forecastday.getJSONObject("day");
+                // Temperature
+                newEntry.setMaxtemp_c(Float.parseFloat(weather.getString("maxtempC")));
+                newEntry.setMaxtemp_f(Float.parseFloat(weather.getString("maxtempF")));
+                newEntry.setMintemp_c(Float.parseFloat(weather.getString("mintempC")));
+                newEntry.setMintemp_f(Float.parseFloat(weather.getString("mintempF")));
 
-                newEntry.setMaxtemp_c(Float.parseFloat(day.getString("maxtemp_c")));
-                newEntry.setMaxtemp_f(Float.parseFloat(day.getString("maxtemp_f")));
-                newEntry.setMintemp_c(Float.parseFloat(day.getString("mintemp_c")));
-                newEntry.setMintemp_f(Float.parseFloat(day.getString("mintemp_f")));
-                newEntry.setAvgtemp_c(Float.parseFloat(day.getString("avgtemp_c")));
-                newEntry.setAvgtemp_f(Float.parseFloat(day.getString("avgtemp_f")));
+                float avgTempC = 0;
+                float avgTempF = 0;
+                for (int i = 0; i < hourly.length(); i++) {
+                    avgTempC += Float.parseFloat(hourly.getJSONObject(i).getString("tempC"));
+                    avgTempF += Float.parseFloat(hourly.getJSONObject(i).getString("tempF"));
+                }
+                newEntry.setAvgtemp_c(avgTempC / hourly.length());
+                newEntry.setAvgtemp_f(avgTempF / hourly.length());
 
-
+                // Wind speed
                 float avgWindSpeedKph = 0;
                 float avgWindSpeedMph = 0;
-                JSONArray hour = forecastday.getJSONArray("hour");
-                for (int i = 0; i < hour.length(); i++) {
-                    avgWindSpeedKph += Float.parseFloat(hour.getJSONObject(i).getString("wind_kph"));
-                    avgWindSpeedMph += Float.parseFloat(hour.getJSONObject(i).getString("wind_mph"));
+                for (int i = 0; i < hourly.length(); i++) {
+                    avgWindSpeedKph += Float.parseFloat(hourly.getJSONObject(i).getString("windspeedKmph"));
+                    avgWindSpeedMph += Float.parseFloat(hourly.getJSONObject(i).getString("windspeedMiles"));
                 }
-                newEntry.setAvgwind_kph(avgWindSpeedKph / hour.length());
-                newEntry.setAvgwind_mph(avgWindSpeedMph / hour.length());
+                newEntry.setAvgwind_kph(avgWindSpeedKph / hourly.length());
+                newEntry.setAvgwind_mph(avgWindSpeedMph / hourly.length());
 
-                newEntry.setMaxwind_mph(Float.parseFloat(day.getString("maxwind_mph")));
-                newEntry.setMaxwind_kph(Float.parseFloat(day.getString("maxwind_kph")));
+                // Precipitation
+                float precipMM = 0;
+                for (int i = 0; i < hourly.length(); i++) {
+                    precipMM += Float.parseFloat(hourly.getJSONObject(i).getString("precipMM"));
+                }
+                newEntry.setTotalprecip_mm(precipMM);
 
-                newEntry.setTotalprecip_mm(Float.parseFloat(day.getString("totalprecip_mm")));
-                newEntry.setTotalprecip_in(Float.parseFloat(day.getString("totalprecip_in")));
-                newEntry.setAvgvis_km(Float.parseFloat(day.getString("avgvis_km")));
-                newEntry.setAvgvis_miles(Float.parseFloat(day.getString("avgvis_miles")));
-                newEntry.setAvghumidity(Float.parseFloat(day.getString("avghumidity")));
-                newEntry.setUv(Float.parseFloat(day.getString("uv")));
+                // Humidity
+                float avg_humidity = 0;
+                for (int i = 0; i < hourly.length(); i++) {
+                    avg_humidity += Float.parseFloat(hourly.getJSONObject(i).getString("humidity"));
+
+                }
+                newEntry.setAvghumidity(avg_humidity / hourly.length());
 
 //                Add the Entry to local database
                 new InsertDbAsync(db, newEntry).execute();
@@ -87,13 +118,13 @@ public final class QueryDbAsync extends AsyncTask<Void, Void, WeatherEntity> {
             } catch (JSONException | IOException e) {
                 e.printStackTrace();
             }
-
-
-//            weatherDAO.insert(new_entity);
         }
 
     }
 
+    /*
+    Wrapper to do get JSON object from an HTTP request
+     */
     private JSONObject getJSONObjectFromURL(String urlString) throws IOException, JSONException {
         HttpURLConnection urlConnection = null;
         URL url = new URL(urlString);
@@ -114,7 +145,6 @@ public final class QueryDbAsync extends AsyncTask<Void, Void, WeatherEntity> {
         br.close();
 
         String jsonString = sb.toString();
-        System.out.println("JSON: " + jsonString);
 
         urlConnection.disconnect();
 
