@@ -27,14 +27,14 @@ public class WeatherEntity {
     private float avgtemp_f;
     private float avgwind_mph;
     private float avgwind_kph;
-    private float totalprecip_mm;
+    private float avgprecip_mm;
     private float avghumidity;
 
     @Ignore
     public WeatherEntity() {
     }
 
-    public WeatherEntity(String city, String date, float maxtemp_c, float maxtemp_f, float mintemp_c, float mintemp_f, float avgtemp_c, float avgtemp_f, float totalprecip_mm, float avghumidity) {
+    public WeatherEntity(String city, String date, float maxtemp_c, float maxtemp_f, float mintemp_c, float mintemp_f, float avgtemp_c, float avgtemp_f, float avgprecip_mm, float avghumidity) {
         this.city = city;
         this.date = date;
         this.maxtemp_c = maxtemp_c;
@@ -43,7 +43,7 @@ public class WeatherEntity {
         this.mintemp_f = mintemp_f;
         this.avgtemp_c = avgtemp_c;
         this.avgtemp_f = avgtemp_f;
-        this.totalprecip_mm = totalprecip_mm;
+        this.avgprecip_mm = avgprecip_mm;
         this.avghumidity = avghumidity;
     }
 
@@ -149,12 +149,12 @@ public class WeatherEntity {
         this.avgwind_kph = avgwind_kph;
     }
 
-    public float getTotalprecip_mm() {
-        return totalprecip_mm;
+    public float getAvgprecip_mm() {
+        return avgprecip_mm;
     }
 
-    public void setTotalprecip_mm(float totalprecip_mm) {
-        this.totalprecip_mm = totalprecip_mm;
+    public void setAvgprecip_mm(float avgprecip_mm) {
+        this.avgprecip_mm = avgprecip_mm;
     }
 
     public float getAvghumidity() {

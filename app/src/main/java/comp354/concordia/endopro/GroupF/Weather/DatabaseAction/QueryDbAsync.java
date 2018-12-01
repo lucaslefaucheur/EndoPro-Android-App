@@ -102,7 +102,7 @@ public final class QueryDbAsync extends AsyncTask<Void, Void, WeatherEntity> {
                 for (int i = 0; i < hourly.length(); i++) {
                     precipMM += Float.parseFloat(hourly.getJSONObject(i).getString("precipMM"));
                 }
-                newEntry.setTotalprecip_mm(precipMM);
+                newEntry.setAvgprecip_mm(precipMM / hourly.length());
 
                 // Humidity
                 float avg_humidity = 0;
