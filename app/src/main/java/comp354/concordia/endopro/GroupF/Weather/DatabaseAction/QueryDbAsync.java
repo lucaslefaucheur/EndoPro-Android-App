@@ -17,7 +17,7 @@ import comp354.concordia.endopro.GroupF.Weather.WeatherDAO;
 import comp354.concordia.endopro.GroupF.Weather.WeatherDatabase;
 import comp354.concordia.endopro.GroupF.Weather.WeatherEntity;
 
-public final class QueryDbAsync extends AsyncTask<Void, Void, WeatherEntity> {
+public final class QueryDbAsync extends AsyncTask<Void, Void, Void> {
 
     private final String API_URL = "https://api.worldweatheronline.com/premium/v1/past-weather.ashx";
     private final String API_KEY = "5cc8bb3a2dbd47bb942200929182911";
@@ -33,13 +33,10 @@ public final class QueryDbAsync extends AsyncTask<Void, Void, WeatherEntity> {
     }
 
     @Override
-    protected WeatherEntity doInBackground(final Void... params) {
+    protected Void doInBackground(final Void... params) {
         WeatherDAO weatherDAO = db.weatherDAO();
-        return weatherDAO.getWeatherEntity(date);
-    }
+        WeatherEntity entity =  weatherDAO.getWeatherEntity(date);
 
-    @Override
-    protected void onPostExecute(WeatherEntity entity) {
         if (entity == null) {
 
 
@@ -119,7 +116,7 @@ public final class QueryDbAsync extends AsyncTask<Void, Void, WeatherEntity> {
                 e.printStackTrace();
             }
         }
-
+        return null;
     }
 
     /*

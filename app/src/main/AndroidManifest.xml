@@ -48,13 +48,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".GroupF.MainPage" />
         </activity>
-        <activity android:name=".GroupF.AppInit">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <!--<activity android:name=".GroupF.AppInit">-->
+            <!--&lt;!&ndash;<intent-filter>&ndash;&gt;-->
+                <!--&lt;!&ndash;&lt;!&ndash;<category android:name="android.intent.category.LAUNCHER" />&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;</intent-filter>&ndash;&gt;-->
+        <!--</activity>-->
         <activity android:name=".Task3"></activity>
     </application>
 

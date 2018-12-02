@@ -2,8 +2,11 @@ package comp354.concordia.endopro;
 
 import android.annotation.SuppressLint;
 import android.arch.persistence.room.Room;
+import android.os.AsyncTask;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -39,39 +42,58 @@ public class Task3 extends AppCompatActivity {
         //TODO Add method to find the number of rest days
         int rest_day = 2;
 
-        try {
-            // Get predictions from server
-            @SuppressLint("DefaultLocale") JSONObject response = getJSONObjectFromURL(String.format("http://"+IP+"/?data=[%d,%f,%f,%f,%f]",
-                    rest_day,
-                    weatherEntity.getAvgtemp_c(),
-                    weatherEntity.getAvgwind_kph(),
-                    weatherEntity.getAvgprecip_mm(),
-                    weatherEntity.getAvghumidity()));
+//        Query data on new thread
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Get predictions from server
+                    @SuppressLint("DefaultLocale") JSONObject response = getJSONObjectFromURL(String.format("http://" + IP + "/?data=[%d,%f,%f,%f,%f]",
+                            rest_day,
+                            weatherEntity.getAvgtemp_c(),
+                            weatherEntity.getAvgwind_kph(),
+                            weatherEntity.getAvgprecip_mm(),
+                            weatherEntity.getAvghumidity()));
 
-            // Extract prediction result
-            String str = response.getString("predictions");
-            String[] a = str.substring(2,str.length()-2).split(",");
+                    // Extract prediction result
+                    String str = response.getString("predictions");
+                    String[] a = str.substring(2, str.length() - 2).split(",");
 
-            // Display average speed
-            TextView avgSpeed = findViewById(R.id.EstmAvgSpeed);
-            avgSpeed.setText(String.format("%.2f Kph", Float.parseFloat(a[0])));
+                    // Update the UI with the UI thread
+                    runOnUiThread(new Runnable() {
 
-            // Display average distance
-            TextView avgDist = findViewById(R.id.EstmDist);
-            avgDist.setText(String.format("%.2f Km", Float.parseFloat(a[1])));
+                        @Override
+                        public void run() {
+                            ConstraintLayout load = findViewById(R.id.load);
+                            load.setVisibility(View.GONE);
 
-//            TODO get moving average of past 10 days and use it to compare with the predictive result
-//            if both predictions better then moving average -->  GOOD Day (Green)
-//            if one prediction better --> AVERAGE Day (Yellow / Orange)
-//            else BAD day (Red)
-            /*
-            if it's an average day then "today" label is: "Today is an"
-            else "Today is a"
-             */
+                            // Display average speed
+                            TextView avgSpeed = findViewById(R.id.EstmAvgSpeed);
+                            avgSpeed.setText(String.format("%.2f Kph", Float.parseFloat(a[0])));
 
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
+                            // Display average distance
+                            TextView avgDist = findViewById(R.id.EstmDist);
+                            avgDist.setText(String.format("%.2f Km", Float.parseFloat(a[1])));
+
+                            //TODO get moving average of past 10 days and use it to compare with the predictive result
+                            //if both predictions better then moving average -->  GOOD Day (Green)
+                            //if one prediction better --> AVERAGE Day (Yellow / Orange)
+                            //else BAD day (Red)
+                            /*
+                            if it's an average day then "today" label is: "Today is an"
+                            else "Today is a"
+                             */
+
+                        }
+                    });
+
+
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
     }
 

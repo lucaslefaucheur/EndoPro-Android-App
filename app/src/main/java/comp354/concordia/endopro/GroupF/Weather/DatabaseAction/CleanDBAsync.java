@@ -22,9 +22,4 @@ public final class CleanDBAsync extends AsyncTask<Void, Void, Void> {
         weatherDAO.cleanDB(date_epoch);
         return null;
     }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-
-    }
 }

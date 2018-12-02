@@ -3,6 +3,7 @@ package comp354.concordia.endopro;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import comp354.concordia.endopro.Common.User;
 import comp354.concordia.endopro.DanielT.Filtering;
@@ -33,7 +36,7 @@ import comp354.concordia.endopro.Hong.test;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG="endopro_logi_main";
+    private static final String TAG = "endopro_logi_main";
     private EditText userNameTxt;
     private EditText passwordTxt;
     private CheckBox autoAuth;
@@ -53,12 +56,12 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        FileInputStream file=null;
+        FileInputStream file = null;
         try {
             file = openFileInput("endoData.txt");
             ObjectInputStream object = new ObjectInputStream(file);
 
-            App_Data data =(App_Data)object.readObject();
+            App_Data data = (App_Data) object.readObject();
 
             User.setApp_data(data);
 
@@ -66,16 +69,16 @@ public class MainActivity extends AppCompatActivity {
             object.close();
             Log.i(TAG, "handleActionRead: File found");
         } catch (Exception e) {
-            Log.i(TAG, "handleActionRead: "+e.getMessage());
+            Log.i(TAG, "handleActionRead: " + e.getMessage());
             Log.i(TAG, "handleActionRead: File not found!");
             User.setApp_data(new App_Data());
         }
 
-        Intent save = new Intent(getApplicationContext(),StorageIntent.class);
+        Intent save = new Intent(getApplicationContext(), StorageIntent.class);
         startService(save);
 
 //        Create the link with local database
-        WeatherDatabase db = Room.databaseBuilder(getApplicationContext(),
+        final WeatherDatabase DB = Room.databaseBuilder(getApplicationContext(),
                 WeatherDatabase.class, "weather-db").build();
 
 //        Get today's and the past X's days data.
@@ -84,12 +87,19 @@ public class MainActivity extends AppCompatActivity {
         WeatherEntity[] dataEntries = new WeatherEntity[NB_WEATHER_ENTRY];
         for (int i = 0; i < NB_WEATHER_ENTRY; i++) {
 
-            String day = curr.minusDays(i).toString();
-            new QueryDbAsync(db, day).execute();
+            final String DAY = curr.minusDays(i).toString();
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    new QueryDbAsync(DB, DAY).execute();
+                }
+            });
+
+
         }
 
 //        Clean the database from unused entries
-        new CleanDBAsync(db, curr.minusDays(NB_WEATHER_ENTRY).atStartOfDay(ZoneId.systemDefault()).toEpochSecond()).execute();
+        new CleanDBAsync(DB, curr.minusDays(NB_WEATHER_ENTRY).atStartOfDay(ZoneId.systemDefault()).toEpochSecond()).execute();
 
 
         //Get all UI elements
@@ -118,25 +128,25 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         userNameTxt.getText().clear();
         passwordTxt.getText().clear();
-        if(autoAuth.isChecked()) autoAuth.toggle();
+        if (autoAuth.isChecked()) autoAuth.toggle();
         passwordTxt.clearFocus();
         clearError();
         checkSignedUser();
     }
 
-    public void TransitionToDashboard(){
-        Intent dashboard = new Intent(getApplicationContext(),FetchActivity.class);
+    public void TransitionToDashboard() {
+        Intent dashboard = new Intent(getApplicationContext(), FetchActivity.class);
         startActivity(dashboard);
     }
 
-    private void checkSignedUser(){
+    private void checkSignedUser() {
         /*
             If no user is signed in or the previous user chose not to auto sign in,
             this step will be skipped.
          */
 
-        if(User.getInstance()==null){
-            if(User.getApp_data().getCached()==null)
+        if (User.getInstance() == null) {
+            if (User.getApp_data().getCached() == null)
                 return;
             User.setInstance(User.getApp_data().getCached());
             Log.i(TAG, "checkSignedUser: Auto Signing in user");
@@ -144,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         TransitionToDashboard();
     }
 
-    private void handleSignin(boolean autoAuth){
+    private void handleSignin(boolean autoAuth) {
         /*
             Validate Credentials
             Cases:
@@ -153,42 +163,42 @@ public class MainActivity extends AppCompatActivity {
                     1.b) Validation failed
                 2) User Doesn't exist
         */
-        try{
-            String username=userNameTxt.getText().toString();
-            String password=passwordTxt.getText().toString();
+        try {
+            String username = userNameTxt.getText().toString();
+            String password = passwordTxt.getText().toString();
 
-            if(verifyCredential(username,password)){
+            if (verifyCredential(username, password)) {
                 /*
                     Transition to data fetcher activity that will handle collecting
                     data from Endomondo
                 */
-                if(autoAuth && User.getApp_data().getCached()==null){
+                if (autoAuth && User.getApp_data().getCached() == null) {
                     User.rememberUser();
-                    Intent save = new Intent(getApplicationContext(),StorageIntent.class);
+                    Intent save = new Intent(getApplicationContext(), StorageIntent.class);
                     startService(save);
                 }
                 TransitionToDashboard();
-            }else{
+            } else {
                 throw new AuthenticationException("Invalid Credentials");
             }
-        }catch(AuthenticationException e){
+        } catch (AuthenticationException e) {
             setError(e.getMessage());
-        }catch (Exception general){
+        } catch (Exception general) {
             setError(general.getMessage());
         }
     }
 
-    private void handleSignup(){
+    private void handleSignup() {
         EditText userNameTxt = findViewById(R.id.usernameText_main);
-        String userName=userNameTxt.getText().toString();
+        String userName = userNameTxt.getText().toString();
         /*
             User Creation Phase
             If user already entered some info before clicking "Sign Up", that info
             will be saved and passed on to the next phase.
         */
 
-        Intent signup = new Intent(getApplicationContext(),SignUp.class);
-        signup.putExtra("username",userName);
+        Intent signup = new Intent(getApplicationContext(), SignUp.class);
+        signup.putExtra("username", userName);
         startActivity(signup);
     }
 
@@ -197,16 +207,17 @@ public class MainActivity extends AppCompatActivity {
 
         User user = User.getApp_data().getUser(username);
 
-        if(user==null) throw new AuthenticationException("User not found");
+        if (user == null) throw new AuthenticationException("User not found");
 
         User.setInstance(user);
-        return user.Authenticate(username,password);
+        return user.Authenticate(username, password);
     }
 
-    private void clearError(){
+    private void clearError() {
         errorText.setVisibility(View.INVISIBLE);
     }
-    private void setError(String errText){
+
+    private void setError(String errText) {
         errorText.setText(errText);
         errorText.setVisibility(View.VISIBLE);
     }
