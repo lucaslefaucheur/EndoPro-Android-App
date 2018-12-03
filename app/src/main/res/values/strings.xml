@@ -11,4 +11,5 @@
     <string name="highTemp">Highest temperature:</string>
     <string name="lowTemp">Lowest temperature:</string>
     <string name="degreeC">°C</string>
+    <string name="predictNoWorkout">No prediction is currently available.\nRecord more workouts and try again.</string>
 </resources>

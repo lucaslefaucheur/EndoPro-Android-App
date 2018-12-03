@@ -2,11 +2,14 @@ package comp354.concordia.endopro;
 
 import android.annotation.SuppressLint;
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -18,7 +21,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
 
+import comp354.concordia.endopro.Common.EndoProWorkout;
+import comp354.concordia.endopro.Common.User;
+import comp354.concordia.endopro.GroupF.MainPage;
 import comp354.concordia.endopro.GroupF.Weather.WeatherDatabase;
 import comp354.concordia.endopro.GroupF.Weather.WeatherEntity;
 
@@ -31,70 +39,149 @@ public class Task3 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task3);
 
+        // Hide background view
+        ConstraintLayout notEnoughData = findViewById(R.id.notEnoughData);
+        notEnoughData.setVisibility(View.GONE);
+        LinearLayout predictInfo = findViewById(R.id.predictInfo);
+        predictInfo.setVisibility(View.GONE);
 
-        //        Create the link with local database
-        WeatherDatabase db = Room.databaseBuilder(getApplicationContext(),
-                WeatherDatabase.class, "weather-db").allowMainThreadQueries().build();
+        // Retrieve user workouts
+        User user = User.getInstance();
+        ArrayList<EndoProWorkout> workouts = user.getWorkouts();
 
-        LocalDate now = LocalDate.now();
-        WeatherEntity weatherEntity = db.weatherDAO().getWeatherEntity(now.toString());
+        // Do prediction
+        if (workouts.size() > 0) {
 
-        //TODO Add method to find the number of rest days
-        int rest_day = 2;
+            //        Create the link with local database
+            WeatherDatabase db = Room.databaseBuilder(getApplicationContext(),
+                    WeatherDatabase.class, "weather-db").allowMainThreadQueries().build();
+
+            LocalDate now = LocalDate.now();
+            WeatherEntity weatherEntity = db.weatherDAO().getWeatherEntity(now.toString());
+
+            // Calculate rest days
+            LocalDate lastWorkoutDate = LocalDate.parse(workouts.get(0).getStartTime().substring(0, 10));
+            int rest_day = Period.between(lastWorkoutDate, LocalDate.now()).getDays();
+
 
 //        Query data on new thread
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // Get predictions from server
-                    @SuppressLint("DefaultLocale") JSONObject response = getJSONObjectFromURL(String.format("http://" + IP + "/?data=[%d,%f,%f,%f,%f]",
-                            rest_day,
-                            weatherEntity.getAvgtemp_c(),
-                            weatherEntity.getAvgwind_kph(),
-                            weatherEntity.getAvgprecip_mm(),
-                            weatherEntity.getAvghumidity()));
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        // Get predictions from server
+                        @SuppressLint("DefaultLocale") JSONObject response = getJSONObjectFromURL(String.format("http://" + IP + "/?data=[%d,%f,%f,%f,%f]",
+                                rest_day,
+                                weatherEntity.getAvgtemp_c(),
+                                weatherEntity.getAvgwind_kph(),
+                                weatherEntity.getAvgprecip_mm(),
+                                weatherEntity.getAvghumidity()));
 
-                    // Extract prediction result
-                    String str = response.getString("predictions");
-                    String[] a = str.substring(2, str.length() - 2).split(",");
+                        // Extract prediction result
+                        String str = response.getString("predictions");
+                        String[] predictions = str.substring(2, str.length() - 2).split(",");
+                        float avgSpeedPredict = Float.parseFloat(predictions[0]);
+                        float distancePredict = Float.parseFloat(predictions[1]);
 
-                    // Update the UI with the UI thread
-                    runOnUiThread(new Runnable() {
+                        // Calculate moving average of speed and distance for last X workouts
+                        float movingAvgSpeed = 0;
+                        float movingAvgDist = 0;
+                        int avgSize = 10;
+                        int nbWorkouts = workouts.size();
 
-                        @Override
-                        public void run() {
-                            ConstraintLayout load = findViewById(R.id.load);
-                            load.setVisibility(View.GONE);
+                        if (nbWorkouts < avgSize) {
 
-                            // Display average speed
-                            TextView avgSpeed = findViewById(R.id.EstmAvgSpeed);
-                            avgSpeed.setText(String.format("%.2f Kph", Float.parseFloat(a[0])));
+                            for (EndoProWorkout w : workouts) {
+                                movingAvgSpeed += w.getSpeedAverage();
+                                movingAvgDist += w.getDistance();
+                            }
+                        } else {
 
-                            // Display average distance
-                            TextView avgDist = findViewById(R.id.EstmDist);
-                            avgDist.setText(String.format("%.2f Km", Float.parseFloat(a[1])));
-
-                            //TODO get moving average of past 10 days and use it to compare with the predictive result
-                            //if both predictions better then moving average -->  GOOD Day (Green)
-                            //if one prediction better --> AVERAGE Day (Yellow / Orange)
-                            //else BAD day (Red)
-                            /*
-                            if it's an average day then "today" label is: "Today is an"
-                            else "Today is a"
-                             */
-
+                            for (EndoProWorkout w : workouts.subList(nbWorkouts - avgSize, nbWorkouts)) {
+                                movingAvgSpeed += w.getSpeedAverage();
+                                movingAvgDist += w.getDistance();
+                            }
                         }
-                    });
+
+                        movingAvgSpeed /= workouts.size();
+                        movingAvgDist /= workouts.size();
+
+                        final int performanceIndex;
+
+                        if (avgSpeedPredict > movingAvgSpeed && distancePredict > movingAvgDist)
+                            performanceIndex = 1;
+                        else if (avgSpeedPredict < movingAvgSpeed && distancePredict < movingAvgDist)
+                            performanceIndex = -1;
+                        else
+                            performanceIndex = 0;
 
 
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
+                        // Update the UI with the UI thread
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                // Hide loading screen and show view
+                                predictInfo.setVisibility(View.VISIBLE);
+                                ConstraintLayout load = findViewById(R.id.load);
+                                load.setVisibility(View.GONE);
+
+                                // Display average speed
+                                TextView avgSpeed = findViewById(R.id.EstmAvgSpeed);
+                                avgSpeed.setText(String.format("%.2f Kph", avgSpeedPredict));
+
+                                // Display average distance
+                                TextView avgDist = findViewById(R.id.EstmDist);
+                                avgDist.setText(String.format("%.2f Km", distancePredict));
+
+                                // Change first line text to avoid typos with a/an
+
+                                TextView perf = findViewById(R.id.perf);
+                                // Set performance value
+
+                                switch (performanceIndex) {
+                                    // Bad day
+                                    case -1:
+                                        perf.setText("BAD");
+                                        perf.setTextColor(0xffcc0000);
+                                        break;
+
+                                    // Average day
+                                    case 0:
+                                        perf.setText("AVERAGE");
+                                        perf.setTextColor(0xffffbb33);
+                                        break;
+
+                                    // Good day
+                                    case 1:
+                                        perf.setText("GOOD");
+                                        perf.setTextColor(0xff99cc00);
+                                        break;
+                                }
+                            }
+                        });
+
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            // Hide loading screen and show view
+            notEnoughData.setVisibility(View.VISIBLE);
+            ConstraintLayout load = findViewById(R.id.load);
+            load.setVisibility(View.GONE);
 
+            // Add onClick to return to home page
+            Button mainPage = findViewById(R.id.mainPage);
+            mainPage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
+                }
+            });
+        }
     }
 
     /*
@@ -124,5 +211,16 @@ public class Task3 extends AppCompatActivity {
         urlConnection.disconnect();
 
         return new JSONObject(jsonString);
+    }
+
+    private void onClick(View view) {
+        Intent intent;
+        switch (view.getId()) {
+            case R.id.mainPage:
+                intent = new Intent(getApplicationContext(), MainPage.class);
+                startActivity(intent);
+                finish();
+                break;
+        }
     }
 }
