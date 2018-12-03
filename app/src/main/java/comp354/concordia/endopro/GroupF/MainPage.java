@@ -47,7 +47,7 @@ public class MainPage extends AppCompatActivity {
 
             case R.id.logout:
                 User.signOut();
-                intent = new Intent(getApplicationContext(),StorageIntent.class);
+                intent = new Intent(this,StorageIntent.class);
                 startService(intent);
                 finish();
                 break;

@@ -172,15 +172,6 @@ public class Task3 extends AppCompatActivity {
             notEnoughData.setVisibility(View.VISIBLE);
             ConstraintLayout load = findViewById(R.id.load);
             load.setVisibility(View.GONE);
-
-            // Add onClick to return to home page
-            Button mainPage = findViewById(R.id.mainPage);
-            mainPage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
         }
     }
 
@@ -211,16 +202,5 @@ public class Task3 extends AppCompatActivity {
         urlConnection.disconnect();
 
         return new JSONObject(jsonString);
-    }
-
-    private void onClick(View view) {
-        Intent intent;
-        switch (view.getId()) {
-            case R.id.mainPage:
-                intent = new Intent(getApplicationContext(), MainPage.class);
-                startActivity(intent);
-                finish();
-                break;
-        }
     }
 }
