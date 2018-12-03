@@ -11,4 +11,6 @@
     <color name="accentBtn">#541160</color>
     <color name="TempHigh">#E82321</color>
     <color name="TempLow">#34CAFF</color>
+    <color name="TempAvg">#FFB090</color>
+    <color name="WindSpeedAvg">#BEB4E8</color>
 </resources>
